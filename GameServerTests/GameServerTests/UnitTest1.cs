@@ -3,13 +3,11 @@ using TinyBrowser.Scripts;
 
 namespace GameServerTests{
     public class TinyBrowserTests{
-        [SetUp]
-        public void Setup(){ }
-
-        [Test]
-        public void Test1(){
-            Tcp tcp = new Tcp();
-            Assert.Pass();
-        }
+        // [SetUp]
+        // public void Setup(){ }
+        //
+        // [Test]
+        // public void Test1(){
+        // }
     }
 }
