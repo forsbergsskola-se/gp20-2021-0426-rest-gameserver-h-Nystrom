@@ -11,14 +11,9 @@ namespace TinyBrowser.Scripts{
             
             Setup();
             var webPage = WebRequester.HttpRequest(Host, Port).GetWebPage();
-            Console.WriteLine(webPage.Host);
-            Console.WriteLine(webPage.Title);
-            Console.WriteLine(webPage.RawHtml.Length);
-            for (var i = 0; i < webPage.SubPages.Count; i++){
-                Console.WriteLine($"i: {i}, (Name: {webPage.SubPages[i].Title}), (Link: {webPage.SubPages[i].Uri})");
-            }
+            DisplayCurrentWebPage(webPage);
             
-            
+
             Console.ReadKey();
             ClearStorage();
         }
@@ -37,7 +32,12 @@ namespace TinyBrowser.Scripts{
             Console.WriteLine(Storage.Clear());
         }
         static void DisplayCurrentWebPage(WebPage webPage){
-            throw new NotImplementedException("Not implemented yet!");
+            Console.WriteLine(webPage.Host);
+            Console.WriteLine(webPage.Title);
+            Console.WriteLine(webPage.RawHtml.Length);
+            for (var i = 0; i < webPage.SubPages.Count; i++){
+                Console.WriteLine($"i: {i}, (Name: {webPage.SubPages[i].Title}), (Link: {webPage.SubPages[i].Uri})");
+            }
         }
     }
 }

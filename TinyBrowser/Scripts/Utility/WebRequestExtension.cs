@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using TinyBrowser.Scripts.Data;
 
 namespace TinyBrowser.Scripts.Utility{
-    public static class WebRequestExtension{
+    public static class WebRequestExtension{ //TODO: Change this.
         public static WebPage GetWebPage(this RequestData requestData){
             var title = GeContentBetweenTags(requestData.RawHtml, "<title>", "</title>", 0);
             var subPages = GetSubPages(requestData.RawHtml, requestData.Host);
@@ -46,15 +45,13 @@ namespace TinyBrowser.Scripts.Utility{
 
         static SubPage GetContentInContent(string content){
             if (content.StartsWith("//") || content.StartsWith("http", StringComparison.OrdinalIgnoreCase) || 
-                content.StartsWith("mailto:", StringComparison.OrdinalIgnoreCase))
-                throw new ArgumentException("Argument exception: Not a subPage ");
-            
+                content.Contains("mailto", StringComparison.OrdinalIgnoreCase))
+                throw new ArgumentException("Argument exception: Not a subPage...");
             var temp = content.Split("\">");
-            if (temp.Length < 2)
-                return new SubPage(temp[0], "Missing");
-            var title = Regex.Replace(temp[^1], @"<[^>]+>", ""); //TODO: Change this.
+            Console.WriteLine(temp.Length + content);
+            var title = Regex.Replace(temp[^1], @"<[^>]+>", "");
             
-            return temp[0].Length == 1 ? new SubPage("Missing", title) : new SubPage(temp[0], title);
+            return title.Length == 0 ? new SubPage(temp[0], "Missing") : new SubPage(temp[0], title);
         }
     }
 }
