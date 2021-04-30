@@ -1,31 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
 using TinyBrowser.Scripts.Data;
+using TinyBrowser.Scripts.Utility;
 
 namespace TinyBrowser.Scripts{
     class Program{
-        const string HostName = "acme.com";
+        const string Host = "acme.com";
         const int Port = 80;
-        static WebPage _currentWebPage;
-
+        //TODO: checkout xmlReader
         static void Main(string[] args){
-            //TODO: checkout xmlReader
-            _currentWebPage = new WebPage(null, HostName, null);
-            Storage.SetUpFolders();
             
-            if (Storage.IsCacheOutDated(_currentWebPage)){
-                _currentWebPage = WebRequester.SendAndReceiveRequest(HostName, Port);
-                Storage.CacheWebPage(_currentWebPage);
+            Setup();
+            
+            try{
+                var temp = GoToWebPage(Host);
+                DisplayCurrentWebPage(temp);
+            }
+            catch (Exception e){
+                Console.WriteLine(e);
             }
             
             Console.ReadKey();
-
-
+            ClearStorage();
         }
-        static void DisplayCurrentWebPage(string title, List<string> hyperLinks){
-            Console.WriteLine(title);
-            for (var i = 0; i < hyperLinks.Count; i++){
-                Console.WriteLine($"{i}: {HostName}/{hyperLinks[i]}");
+        static void Setup(){
+            Storage.SetUpFolders();
+        }
+        static WebPage GoToWebPage(string host){
+            if (!Storage.IsCacheOutDated(host)) 
+                return Storage.GetCachedWebPage(host);
+            
+            var rawHtml = WebRequester.HttpRequest(host, Port);
+            var title = HtmlParser.GetTitle(rawHtml);
+            var subPages = HtmlParser.GetSubPages(rawHtml);
+            var webPage = new WebPage(rawHtml, host, title, subPages);
+            Storage.CacheWebPage(webPage);
+            return webPage;
+        }
+        static void ClearStorage(){
+            Console.WriteLine(Storage.Clear());
+        }
+        static void DisplayCurrentWebPage(WebPage webPage){
+            Console.WriteLine(webPage.Title);
+            for (var i = 0; i < webPage.SubPages.Count; i++){
+                Console.WriteLine($"{i}: {webPage.Host}/{webPage.SubPages[i]}");
             }
         }
     }
