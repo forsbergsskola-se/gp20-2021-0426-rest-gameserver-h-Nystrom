@@ -1,9 +1,9 @@
 ﻿using System;
-using System.ComponentModel.Design;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
+using GitHubExplorer.Data;
 
 namespace GitHubExplorer
 {
@@ -46,6 +46,8 @@ namespace GitHubExplorer
                 response.EnsureSuccessStatusCode();
                 var responseBody = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(responseBody);
+                var userInfo = JsonSerializer.Deserialize<UserData>(responseBody);
+                Console.WriteLine(userInfo?.bio);
             }
             catch (HttpRequestException e){
                 Console.WriteLine(e);
