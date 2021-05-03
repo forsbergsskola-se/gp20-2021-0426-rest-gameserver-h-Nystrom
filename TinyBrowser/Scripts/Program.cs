@@ -13,7 +13,6 @@ namespace TinyBrowser.Scripts{
             var webPage = WebRequester.HttpRequest(Host, Port).GetWebPage();
             DisplayCurrentWebPage(webPage);
             
-
             Console.ReadKey();
             ClearStorage();
         }
