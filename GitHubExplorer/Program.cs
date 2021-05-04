@@ -19,8 +19,7 @@ namespace GitHubExplorer
                 if (ExitApplication()) 
                     return;
             }
-            
-            while (true){
+            while (true){//TODO: Refactor this!!!
                 Console.Clear();
                 DisplayUserProfile();
                 Console.WriteLine($"\r\nOptions:\r\n1. Repositories({_userProfile.public_repos-1}), 2. Search new user, 3: Quit");
@@ -61,12 +60,6 @@ namespace GitHubExplorer
                 _userProfile.Repositories[i].DisplayInfoSnippet();
             }
         }
-        static void PickRepository(){
-            Console.Clear();
-            _userProfile.Repositories[0].DisplayInfo();
-            
-        }
-
         static void InitializeApi(){
             Console.Write("Enter gitHub api-key: ");
             var token = Console.ReadLine();

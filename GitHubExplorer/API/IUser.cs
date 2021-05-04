@@ -3,30 +3,6 @@ using GitHubExplorer.API.Data;
 
 namespace GitHubExplorer.API{
     public interface IUser {
-        
-        /// <summary>
-        ///
-        /// UserProfile:
-        /// Login
-        /// Name
-        /// Location
-        /// Bio
-        /// email
-        /// blog
-        /// twitterUserName
-        /// Company
-        /// hireable
-        ///
-        /// 
-        /// html_url
-        ///
-        ///
-        /// Repos_url
-        /// public repos (int)
-        ///
-        /// Follow
-        /// Following
-        /// </summary>
         string login{ get; }
         string name {get;}
         string bio{ get; }
