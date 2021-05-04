@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using GitHubExplorer.API;
-using GitHubExplorer.API.Data;
-using GitHubExplorer.Utility;
 
 namespace GitHubExplorer
 {
     class Program{
         
         static IUser _userProfile;
-        static IGitHubApi gitHubApi;
+        static IGitHubApi _gitHubApi;
 
         static void Main(string[] args){
             
@@ -22,38 +19,58 @@ namespace GitHubExplorer
                     return;
             }
             while (true){
-                //TODO: Display current user info
-                //TODO: Navigate userInfo
-                //TODO: Get repos + display them
-                //TODO: Get issues
-                InputNavigation();
+                DisplayUserProfile();
+                Options();
+                if (ExitApplication()) 
+                    break;
             }
-            Console.WriteLine("Welcome");
-            // var user = gitHubApi.GetUser(authorization);
-            // var repository = user.GetRepository("");
-            // var issues = repository.GetIssues();
-            // Console.WriteLine($"Welcome {_userProfile.login}!");
-            //TODO: Display user profile info:
-            // InputNavigation();
-
-            Console.WriteLine("Press any key to quit!");
-            Console.ReadKey();
         }
 
+        static void Options(){
+            Console.WriteLine("\r\nOptions:");
+            Console.WriteLine("1. Repositories, 2. Search user, 3. Quit");
+            var temp = GetConsoleKey();
+            switch (temp){
+                case ConsoleKey.D1:
+                    Console.Clear();
+                    Console.WriteLine("OpenRepo");
+                    break;
+                case ConsoleKey.D2:
+                    Console.Clear();
+                    Console.WriteLine("Search other");
+                    break;
+                default:
+                    Console.Clear();
+                    Console.WriteLine("Quit");
+                    break;
+            }
+        }
+
+        static void InitializeApi(){
+            Console.Write("Enter gitHub api-key: ");
+            var token = Console.ReadLine();
+            _gitHubApi = new GitHubApi(token);
+        }
         static bool FindUser(){
             Console.Write("Enter a username: ");
             var userName = Console.ReadLine();
             try{
-                _userProfile = gitHubApi.GetUser(userName);
+                _userProfile = _gitHubApi.GetUser(userName);
                 return true;
             }
             catch (Exception e){
                 Console.WriteLine(e.GetBaseException().Message);
             }
-
             return false;
         }
-
+        static void DisplayUserProfile(){
+            Console.Clear();
+            _userProfile.DisplayInfo();
+        }
+        static ConsoleKey GetConsoleKey(){
+            var keyInfo = Console.ReadKey();
+            return keyInfo.Key;
+        }
         static bool ExitApplication(){
             Console.WriteLine("Press enter to try again!");
             if (GetConsoleKey() != ConsoleKey.Enter){
@@ -64,35 +81,25 @@ namespace GitHubExplorer
             Console.Clear();
             return false;
         }
-
-        static void InitializeApi(){
-            Console.Write("Enter gitHub api-key: ");
-            var token = Console.ReadLine();
-            gitHubApi = new GitHubApi(token);
-        }
-        static void InputNavigation(){
-            Console.WriteLine("Options:");
-            switch (GetConsoleKey()){
-                case ConsoleKey.D1:
-                    // GetRepositories();
-                    break;
-                case ConsoleKey.D2:
-                    Console.WriteLine("Option 2:");
-                    break;
-                case ConsoleKey.D3:
-                    Console.WriteLine("Option 3:");
-                    break;
-                case ConsoleKey.D4:
-                    Console.WriteLine("Option 4:");
-                    break;
-                default:
-                    Console.WriteLine("Unknown input");
-                    break;
-            }
-        }
-        static ConsoleKey GetConsoleKey(){
-            var keyInfo = Console.ReadKey();
-            return keyInfo.Key;
-        }
+        // static void InputNavigation(){
+        //     Console.WriteLine("Options:");
+        //     switch (GetConsoleKey()){
+        //         case ConsoleKey.D1:
+        //             // GetRepositories();
+        //             break;
+        //         case ConsoleKey.D2:
+        //             Console.WriteLine("Option 2:");
+        //             break;
+        //         case ConsoleKey.D3:
+        //             Console.WriteLine("Option 3:");
+        //             break;
+        //         case ConsoleKey.D4:
+        //             Console.WriteLine("Option 4:");
+        //             break;
+        //         default:
+        //             Console.WriteLine("Unknown input");
+        //             break;
+        //     }
+        // }
     }
 }

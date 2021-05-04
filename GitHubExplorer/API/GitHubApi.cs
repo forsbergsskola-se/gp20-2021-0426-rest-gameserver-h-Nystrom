@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -18,14 +19,27 @@ namespace GitHubExplorer.API{
         
         public IUser GetUser(string userName){
             try{
-                var requestTask = HttpRequestJson(userName);
-                requestTask.Wait();
-                return JsonSerializer.Deserialize<UserProfile>(requestTask.Result);
+                var requestUserTask = HttpRequestJson(userName);
+                requestUserTask.Wait();
+                var user = JsonSerializer.Deserialize<UserData>($"{requestUserTask.Result}");
+                user.Repositories = new List<IRepository>();
+                if (user.public_repos == 0)
+                    return user;
+                var temp = GetRepositories(user.repos_url);
+                user.Repositories.AddRange(temp);
+                return user;
             }
             catch (AggregateException e){
                 throw new AggregateException(e.GetBaseException().Message);
             }
         }
+        List<Repository> GetRepositories(string repositoriesUrl){
+            var requestTask = HttpRequestJson(repositoriesUrl);
+            requestTask.Wait();
+            var temp = JsonSerializer.Deserialize<List<Repository>>(requestTask.Result);
+            return temp;
+        }
+
         async Task<string> HttpRequestJson(string uri){
             try{
                 _httpClient = new HttpClient().HeaderSetup(token, GitHubUrl);
@@ -40,16 +54,6 @@ namespace GitHubExplorer.API{
                 throw new AggregateException($"Request failed: {e.StatusCode}");
             }
         }
-        // static void GetRepositories(){
-        //     Console.WriteLine("Repositories:");
-        //     var requestTask = HttpRequestJson();
-        //     requestTask.Wait();
-        //     var repo = JsonSerializer.Deserialize<List<Repository>>(requestTask.Result);
-        //     if(repo.Count == 0)
-        //         return;
-        //     Console.WriteLine(repo.Count);
-        //     Console.WriteLine(repo[0].owner.login);
-        // }
     }
     
 }
