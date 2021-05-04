@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -22,56 +23,53 @@ namespace GitHubExplorer
                 return;
             }
             Console.WriteLine($"Welcome {_userProfile.login}!");
-            Console.WriteLine("Options:");
-            DisplayUserProfile();
-            UserProfileOptions();
+            //TODO: Display user profile info:
+            InputNavigation();
             
-            var requestTask = RequestUserProfile(_userProfile.repos_url);
-            requestTask.Wait();
-            Console.ReadKey();
-
             Console.WriteLine("Press any key to quit!");
             Console.ReadKey();
         }
 
-        static void DisplayUserProfile(){
-            Console.WriteLine(_userProfile.name);
-            Console.WriteLine(_userProfile.bio);
-            Console.WriteLine(_userProfile.location);
-            Console.WriteLine(_userProfile.twitter_username);
-            Console.WriteLine(_userProfile.email);
-            Console.WriteLine(_userProfile.blog);
-            Console.WriteLine(_userProfile.company);
-            Console.WriteLine(_userProfile.followers);
-            Console.WriteLine(_userProfile.following);
-            Console.WriteLine(_userProfile.public_repos);
-        }
+        // static void DisplayUserProfile(){
+        //     Console.WriteLine(_userProfile.name);
+        //     Console.WriteLine(_userProfile.bio);
+        //     Console.WriteLine(_userProfile.location);
+        //     Console.WriteLine(_userProfile.twitter_username);
+        //     Console.WriteLine(_userProfile.email);
+        //     Console.WriteLine(_userProfile.blog);
+        //     Console.WriteLine(_userProfile.company);
+        //     Console.WriteLine(_userProfile.followers);
+        //     Console.WriteLine(_userProfile.following);
+        //     Console.WriteLine(_userProfile.public_repos);
+        // }
 
-        static async Task RequestUserProfile(string uri){
+        static async Task<string> HttpRequestJson(string uri){
             try{
                 _httpClient = new HttpClient().HeaderSetup(_token, GitHubUrl);
                 var response = await _httpClient.GetAsync($"{uri}");
                 response.EnsureSuccessStatusCode();
                 var responseBody = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(responseBody);
-                _userProfile = JsonSerializer.Deserialize<UserProfile>(responseBody);
+                _httpClient.Dispose();
+                return responseBody;
             }
             catch (HttpRequestException e){
-                Console.WriteLine($"Request failed: {e.StatusCode}");
-                throw;
+                _httpClient.Dispose();
+                throw new AggregateException($"Request failed: {e.StatusCode}");
             }
-            _httpClient.Dispose();
+            
         }
         static bool UserLogin(){
             while (true){
                     RequestUserInfo();
                     try{
-                        var requestTask = RequestUserProfile($"users/{_uri}");
+                        var requestTask = HttpRequestJson($"users/{_uri}");
                         requestTask.Wait();
+                        _userProfile = _userProfile = JsonSerializer.Deserialize<UserProfile>(requestTask.Result);
                         Console.Clear();
                         return true;
                     }
                     catch (AggregateException e){
+                        Console.WriteLine(e.GetBaseException().Message);
                         Console.WriteLine("Press enter to try again!");
                         if (GetConsoleKey() != ConsoleKey.Enter){
                             return false;
@@ -86,22 +84,38 @@ namespace GitHubExplorer
             _token = Console.ReadLine();
         }
 
-        static void UserProfileOptions(){
+        static void InputNavigation(){
+            Console.WriteLine("Options:");
             switch (GetConsoleKey()){
-                case ConsoleKey.D0:
-                    Console.WriteLine("Option 0:");
-                    break;
                 case ConsoleKey.D1:
-                    Console.WriteLine("Option 1:");
+                    GetRepositories();
                     break;
                 case ConsoleKey.D2:
                     Console.WriteLine("Option 2:");
+                    break;
+                case ConsoleKey.D3:
+                    Console.WriteLine("Option 3:");
+                    break;
+                case ConsoleKey.D4:
+                    Console.WriteLine("Option 4:");
                     break;
                 default:
                     Console.WriteLine("Unknown input");
                     break;
             }
         }
+
+        static void GetRepositories(){
+            Console.WriteLine("Repositories:");
+            var requestTask = HttpRequestJson(_userProfile.repos_url);
+            requestTask.Wait();
+            var repo = JsonSerializer.Deserialize<List<Repository>>(requestTask.Result);
+            if(repo.Count == 0)
+                return;
+            Console.WriteLine(repo.Count);
+            Console.WriteLine(repo[0].owner.login);
+        }
+
         static ConsoleKey GetConsoleKey(){
             var keyInfo = Console.ReadKey();
             return keyInfo.Key;
