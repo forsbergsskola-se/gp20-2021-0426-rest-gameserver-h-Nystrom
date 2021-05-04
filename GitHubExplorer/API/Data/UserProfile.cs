@@ -1,5 +1,5 @@
-﻿namespace GitHubExplorer.Data{
-    public class UserProfile{
+﻿namespace GitHubExplorer.API.Data{
+    public abstract class UserProfile : IUser{
         public string login{ get; set; }
         public int id{ get; set; }
         public string node_id{ get; set; }
@@ -32,5 +32,10 @@
         public int following{ get; set; }
         public string created_at{ get; set; }
         public string updated_at{ get; set; }
+        public IRepository GetRepository(string repositoryName){
+            throw new System.NotImplementedException();
+        }
+        public string Name => name;
+        public string Location => location;
     }
 }

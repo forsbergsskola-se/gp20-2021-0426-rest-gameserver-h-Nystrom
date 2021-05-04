@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 
-namespace GitHubExplorer{
+namespace GitHubExplorer.Utility{
     public static class HttpClientExtension{
         public static HttpClient HeaderSetup(this HttpClient httpClient, string token, string uri){
             httpClient.DefaultRequestHeaders.Add("Authorization", $"token {token}");

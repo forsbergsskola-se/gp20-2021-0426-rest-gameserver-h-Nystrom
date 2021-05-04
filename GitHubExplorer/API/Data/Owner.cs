@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GitHubExplorer.Data{
+namespace GitHubExplorer.API.Data{
     [Serializable]
     public class Owner{
         public string login{ get; set; }
