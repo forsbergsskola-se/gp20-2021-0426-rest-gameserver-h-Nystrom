@@ -36,6 +36,5 @@ namespace GitHubExplorer.API{
         int public_repos{ get; }
         List<IRepository> Repositories{ get; }
         void DisplayInfo();
-
     }
 }

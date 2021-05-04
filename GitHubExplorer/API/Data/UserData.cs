@@ -43,7 +43,6 @@ namespace GitHubExplorer.API.Data{
             foreach (var element in info){
                 Console.WriteLine(element);
             }
-            // Console.WriteLine();
         }
     }
 }

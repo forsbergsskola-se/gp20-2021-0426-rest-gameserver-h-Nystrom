@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using GitHubExplorer.API;
 
 namespace GitHubExplorer
@@ -18,32 +19,52 @@ namespace GitHubExplorer
                 if (ExitApplication()) 
                     return;
             }
+            
             while (true){
+                Console.Clear();
                 DisplayUserProfile();
-                Options();
-                if (ExitApplication()) 
+                Console.WriteLine($"\r\nOptions:\r\n1. Repositories({_userProfile.public_repos-1}), 2. Search new user, 3: Quit");
+                var input = GetConsoleKey();
+                if (input == ConsoleKey.D1){
+                    var result = 0;
+                    var repoInput = false;
+                    while (!repoInput && result == Math.Clamp(result, 0, _userProfile.public_repos-1)){
+                        Console.Clear();
+                        DisplayRepositories();
+                        Console.WriteLine($"\r\n Pick a repository between 0 and {_userProfile.Repositories.Count}:");
+                        repoInput = int.TryParse(Console.ReadLine(), NumberStyles.Integer, null, out result);
+                    }
+                    Console.Clear();
+                    _userProfile.Repositories[result].DisplayInfo();
+                    Console.WriteLine("\r\nOptions:\r\nPress any key to go back! (WIP)");
+                    Console.ReadLine();
+                }
+                else if (input == ConsoleKey.D2){
+                    while (!FindUser()){
+                        if (ExitApplication())
+                            break;
+                    }
+                }else if (input == ConsoleKey.D3){
+                    Console.Clear();
+                    Console.WriteLine("Shutting down!");
                     break;
+                }
             }
         }
 
-        static void Options(){
-            Console.WriteLine("\r\nOptions:");
-            Console.WriteLine("1. Repositories, 2. Search user, 3. Quit");
-            var temp = GetConsoleKey();
-            switch (temp){
-                case ConsoleKey.D1:
-                    Console.Clear();
-                    Console.WriteLine("OpenRepo");
-                    break;
-                case ConsoleKey.D2:
-                    Console.Clear();
-                    Console.WriteLine("Search other");
-                    break;
-                default:
-                    Console.Clear();
-                    Console.WriteLine("Quit");
-                    break;
+        static void DisplayRepositories(){
+            Console.Clear();
+            Console.WriteLine("Options:");
+            Console.WriteLine("Repositories:");
+            for (var i = 0; i < _userProfile.Repositories.Count; i++){
+                Console.WriteLine($"({i}) {_userProfile.Repositories[i].name}");
+                _userProfile.Repositories[i].DisplayInfoSnippet();
             }
+        }
+        static void PickRepository(){
+            Console.Clear();
+            _userProfile.Repositories[0].DisplayInfo();
+            
         }
 
         static void InitializeApi(){
@@ -81,25 +102,5 @@ namespace GitHubExplorer
             Console.Clear();
             return false;
         }
-        // static void InputNavigation(){
-        //     Console.WriteLine("Options:");
-        //     switch (GetConsoleKey()){
-        //         case ConsoleKey.D1:
-        //             // GetRepositories();
-        //             break;
-        //         case ConsoleKey.D2:
-        //             Console.WriteLine("Option 2:");
-        //             break;
-        //         case ConsoleKey.D3:
-        //             Console.WriteLine("Option 3:");
-        //             break;
-        //         case ConsoleKey.D4:
-        //             Console.WriteLine("Option 4:");
-        //             break;
-        //         default:
-        //             Console.WriteLine("Unknown input");
-        //             break;
-        //     }
-        // }
     }
 }
