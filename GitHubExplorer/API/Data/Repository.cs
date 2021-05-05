@@ -18,14 +18,9 @@ namespace GitHubExplorer.API.Data{
         public List<IIssue> GetIssues(){
             throw new NotImplementedException();
         }
-        public void DisplayInfoSnippet(){
-            var info = new []{$"Repository: {name}",$"Owner: {owner.login}",$"Created at: {created_at}",$"Open issues: {open_issues}",html_url};
-            foreach (var element in info){
-                Console.WriteLine(element);
-            }
-        }
         public void DisplayInfo(){
-            var info = new []{$"Repository: {name}",$"Owner: {owner.login}",$"Description: {description}",$"Created at: {created_at}", $"Last updated: {updated_at}",$"Watchers: {watchers}", $"Forks: {forks_count}",html_url};
+            var info = new []{$"Repository: {name}",$"Owner: {owner.login}",$"Description: {description}",$"Created at: {created_at}", 
+                $"Last updated: {updated_at}",$"Watchers: {watchers}", $"Forks: {forks_count}",html_url};
             foreach (var element in info){
                 Console.WriteLine(element);
             }

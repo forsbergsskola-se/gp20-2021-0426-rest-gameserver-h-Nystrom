@@ -19,46 +19,69 @@ namespace GitHubExplorer
                 if (ExitApplication()) 
                     return;
             }
-            while (true){//TODO: Refactor this!!!
-                Console.Clear();
-                DisplayUserProfile();
-                Console.WriteLine($"\r\nOptions:\r\n1. Repositories({_userProfile.public_repos-1}), 2. Search new user, 3: Quit");
-                var input = GetConsoleKey();
-                if (input == ConsoleKey.D1){
-                    var result = 0;
-                    var repoInput = false;
-                    while (!repoInput && result == Math.Clamp(result, 0, _userProfile.public_repos-1)){
-                        Console.Clear();
-                        DisplayRepositories();
-                        Console.WriteLine($"\r\n Pick a repository between 0 and {_userProfile.Repositories.Count}:");
-                        repoInput = int.TryParse(Console.ReadLine(), NumberStyles.Integer, null, out result);
-                    }
-                    Console.Clear();
-                    _userProfile.Repositories[result].DisplayInfo();
-                    Console.WriteLine("\r\nOptions:\r\nPress any key to go back! (WIP)");
-                    Console.ReadLine();
-                }
-                else if (input == ConsoleKey.D2){
-                    while (!FindUser()){
-                        if (ExitApplication())
-                            break;
-                    }
-                }else if (input == ConsoleKey.D3){
-                    Console.Clear();
-                    Console.WriteLine("Shutting down!");
-                    break;
+            while (true){
+                switch (SelectUserOption()){
+                 case 1:
+                     while (true){
+                         var repositoryIndex = SelectRepository();
+                         _userProfile.Repositories[repositoryIndex].DisplayInfo();
+                         Console.WriteLine($"\r\nOptions:\r\n1. Repositories, 2. User profile, 3: Quit");
+                         var repositoryOption = GetInput(1, 3);
+                         if (repositoryOption == 2){
+                             break;
+                         }
+                         if (repositoryOption == 3){
+                             Console.Clear();
+                             Console.WriteLine("Quitting!");
+                             return;
+                         }
+                     }
+                     break;
+                 case 2:
+                     while (!FindUser()){ 
+                         if (ExitApplication())
+                             return;
+                     }
+                     Console.WriteLine("Not implemented");
+                     break;
+                 case 3:
+                     Console.Clear();
+                     Console.WriteLine("Quitting!");
+                     return;
                 }
             }
         }
 
-        static void DisplayRepositories(){
+        static int SelectUserOption(){
             Console.Clear();
-            Console.WriteLine("Options:");
-            Console.WriteLine("Repositories:");
+            _userProfile.DisplayInfo();
+            Console.WriteLine($"\r\nOptions:\r\n1. Repositories({_userProfile.public_repos}), 2. Search new user, 3: Quit");
+            var userInput = GetInput(1, 3);
+            Console.Clear();
+            return userInput;
+        }
+        static int SelectRepository(){
+            Console.Clear();
+            Console.WriteLine($"{_userProfile.login}'s public repositories:");
             for (var i = 0; i < _userProfile.Repositories.Count; i++){
                 Console.WriteLine($"({i}) {_userProfile.Repositories[i].name}");
-                _userProfile.Repositories[i].DisplayInfoSnippet();
             }
+            Console.WriteLine("Options:");
+            var userInput = GetInput(0, _userProfile.Repositories.Count-1);
+            Console.Clear();
+            return userInput;
+        }
+        static int GetInput(int startIndex, int maxLenght){
+            var result = -1;
+            while (true){
+                
+                if(int.TryParse(Console.ReadLine(), NumberStyles.Integer, null, out result) && result == Math.Clamp(result, startIndex, maxLenght)){
+                    Console.Clear();
+                    return result;
+                }
+                Console.WriteLine($"Error: Needs to be a number between {startIndex} and {maxLenght}");
+            }
+            
         }
         static void InitializeApi(){
             Console.Write("Enter gitHub api-key: ");
@@ -76,10 +99,6 @@ namespace GitHubExplorer
                 Console.WriteLine(e.GetBaseException().Message);
             }
             return false;
-        }
-        static void DisplayUserProfile(){
-            Console.Clear();
-            _userProfile.DisplayInfo();
         }
         static ConsoleKey GetConsoleKey(){
             var keyInfo = Console.ReadKey();

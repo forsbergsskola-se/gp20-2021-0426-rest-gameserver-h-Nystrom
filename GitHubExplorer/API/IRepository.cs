@@ -18,7 +18,5 @@ namespace GitHubExplorer.API{
         List<IIssue> GetIssues();
         void DisplayInfo();
 
-        void DisplayInfoSnippet();
-
     }
 }
