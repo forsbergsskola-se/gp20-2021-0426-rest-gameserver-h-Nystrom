@@ -8,6 +8,9 @@ using GitHubExplorer.Utility;
 
 namespace GitHubExplorer.API{
     public class GitHubApi : IGitHubApi{
+        
+        //TODO: Get issues and create/publish issues!
+        
         const string GitHubUrl = "https://api.github.com/users/";
         HttpClient _httpClient;
         IUser _userProfile;

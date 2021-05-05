@@ -19,6 +19,7 @@ namespace GitHubExplorer
                 if (ExitApplication()) 
                     return;
             }
+            //TODO: Refactor this!
             while (true){
                 switch (SelectUserOption()){
                  case 1:
@@ -51,7 +52,9 @@ namespace GitHubExplorer
                 }
             }
         }
+        //TODO: Refactor this to a command class!
 
+        #region Put in a new command class
         static int SelectUserOption(){
             Console.Clear();
             _userProfile.DisplayInfo();
@@ -83,6 +86,7 @@ namespace GitHubExplorer
             }
             
         }
+        #endregion
         static void InitializeApi(){
             Console.Write("Enter gitHub api-key: ");
             var token = Console.ReadLine();

@@ -16,7 +16,7 @@ namespace GitHubExplorer.API.Data{
         public string issue_events_url{ get; set; }
 
         public List<IIssue> GetIssues(){
-            throw new NotImplementedException();
+            throw new NotImplementedException();//TODO: Implement!
         }
         public void DisplayInfo(){
             var info = new []{$"Repository: {name}",$"Owner: {owner.login}",$"Description: {description}",$"Created at: {created_at}", 
