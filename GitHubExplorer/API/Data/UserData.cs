@@ -39,7 +39,7 @@ namespace GitHubExplorer.API.Data{
         public List<IRepository> Repositories{ get; set;}
 
         public void DisplayInfo(){
-            var info = new[]{$"User: {login}", $"Name: {name}", $"Bio: {bio}",$"Location: {location}", $"Company:{company}", $"Public repositories: {public_repos}", html_url};
+            var info = new[]{$"User: {login}", $"Name: {name}", $"Bio: {bio}",$"Location: {location}", $"Company:{company}",organizations_url, $"Public repositories: {public_repos}", html_url};
             foreach (var element in info){
                 Console.WriteLine(element);
             }

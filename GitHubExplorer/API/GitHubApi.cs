@@ -33,7 +33,7 @@ namespace GitHubExplorer.API{
                 throw new AggregateException(e.GetBaseException().Message);
             }
         }
-        List<Repository> GetRepositories(string repositoriesUrl){
+        IEnumerable<Repository> GetRepositories(string repositoriesUrl){
             var requestTask = HttpRequestJson(repositoriesUrl);
             requestTask.Wait();
             var temp = JsonSerializer.Deserialize<List<Repository>>(requestTask.Result);

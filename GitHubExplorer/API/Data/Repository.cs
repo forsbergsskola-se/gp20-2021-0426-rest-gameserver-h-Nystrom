@@ -25,7 +25,7 @@ namespace GitHubExplorer.API.Data{
             }
         }
         public void DisplayInfo(){
-            var info = new []{$"Repository: {name}",$"Owner: {owner.login}",$"Description: {description}",$"Created at: {created_at}", $"Last updated: {updated_at}",$"Watchers: {watchers}", $"Forks: {forks_count}" ,$"Open issues: {open_issues}", issue_events_url,html_url};
+            var info = new []{$"Repository: {name}",$"Owner: {owner.login}",$"Description: {description}",$"Created at: {created_at}", $"Last updated: {updated_at}",$"Watchers: {watchers}", $"Forks: {forks_count}",html_url};
             foreach (var element in info){
                 Console.WriteLine(element);
             }
