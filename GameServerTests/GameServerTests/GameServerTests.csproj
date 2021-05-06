@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\GitHubExplorer\GitHubExplorer.csproj" />
       <ProjectReference Include="..\..\TinyBrowser\TinyBrowser.csproj" />
     </ItemGroup>
 
