@@ -5,25 +5,22 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using LameScooter.Api.Data;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace LameScooter.Api{
     public class OfflineLameScooterRental : ILameScooterRental{
 
         readonly string databasePath = $"{Environment.CurrentDirectory}/DatabaseDummy/scooters.Json";
-        readonly JsonSerializerSettings options;
+        readonly JsonSerializerOptions options;
         public OfflineLameScooterRental(){
-            options = new JsonSerializerSettings{
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                Formatting = Formatting.Indented
-            };
+            options = new JsonSerializerOptions{
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
         }
         
         public Task<int> GetScooterCountInStation(string stationName){
             try{
-                var rawJson = File.ReadAllText(databasePath);
-                var stations = JsonConvert.DeserializeObject<List<Station>>(rawJson, options);
+                var rawJson = File.ReadAllText(databasePath).Replace("\n","").Replace(" ", "");
+                var stations = JsonSerializer.Deserialize<List<Station>>(rawJson,options);
                 foreach (var station in stations.Where(station => station.Name == stationName)){
                     return Task.FromResult(station.BikesAvailable);
                 }
@@ -35,13 +32,13 @@ namespace LameScooter.Api{
             }
         }
     }
-    //using System.Text.Json;
+    //using Newtonsoft.Json.Serialization;
     //In Constructor:
-    // options = new JsonSerializerOptions{
-    // PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    // options = new JsonSerializerSettings{
+    // ContractResolver = new CamelCasePropertyNamesContractResolver(),
+    // Formatting = Formatting.Indented
     // };
     //In method:
-    // Formatting = Formatting.Indented
-    // var rawJson = File.ReadAllText(databasePath).Replace("\n","").Replace(" ", "");
-    // var stations = JsonSerializer.Deserialize<List<Station>>(rawJson,options);
+    //var rawJson = File.ReadAllText(databasePath);
+    //var stations = JsonConvert.DeserializeObject<List<Station>>(rawJson, options);
 }
