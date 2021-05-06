@@ -13,6 +13,8 @@ namespace LameScooter{
             catch (Exception e){
                 Console.WriteLine(e.GetBaseException().Message);
             }
+            Console.WriteLine("Press any key to exit!");
+            Console.ReadKey();
         }
     }
 }
