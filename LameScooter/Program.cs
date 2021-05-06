@@ -20,12 +20,12 @@ namespace LameScooter{
         }
 
         static ILameScooterRental GetDatabaseType(IReadOnlyList<string> args){//TODO: Use reflection here instead!?
-            if (args.Count == 2 && args[1] == "live"){
-                Console.WriteLine("From server...");
+            if (args.Count == 2 && args[1] == "deprecated"){
+                Console.WriteLine("From deprecated server...");
                 return new LameScooterRental();
                 
             }
-            Console.WriteLine("From cached server...");
+            Console.WriteLine("From offline server...");
             return new OfflineLameScooterRental();
         }
     }

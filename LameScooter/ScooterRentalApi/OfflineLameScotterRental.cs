@@ -19,7 +19,8 @@ namespace LameScooter.ScooterRentalApi{
         
         public Task<IStation> GetScooterStation(string stationName){
             try{
-                var rawJson = File.ReadAllText(databasePath).Replace("\n", "").Trim().Replace(" +", "");
+                var rawJson = File.ReadAllText(databasePath).Replace("\n", "")
+                    .Trim().Replace(" +", "");
                 
                 var stations = JsonSerializer.Deserialize<List<Station>>(rawJson,options);
                 foreach (var station in stations.Where(station => station.Name == stationName)){
