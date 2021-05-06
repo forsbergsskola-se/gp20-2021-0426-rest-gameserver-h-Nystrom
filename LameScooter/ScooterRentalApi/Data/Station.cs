@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LameScooter.Api.Data{
+namespace LameScooter.ScooterRentalApi.Data{
     [Serializable]
     public class Station : IStation{
         public string Id{ get; set; }

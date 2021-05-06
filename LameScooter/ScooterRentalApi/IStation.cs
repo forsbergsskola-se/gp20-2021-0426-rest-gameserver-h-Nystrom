@@ -1,4 +1,4 @@
-﻿namespace LameScooter.Api{
+﻿namespace LameScooter.ScooterRentalApi{
     public interface IStation{
         string Name{ get; }
         int BikesAvailable{ get; }

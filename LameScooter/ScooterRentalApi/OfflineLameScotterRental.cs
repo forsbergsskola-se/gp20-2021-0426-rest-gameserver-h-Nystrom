@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using LameScooter.Api.Data;
+using LameScooter.ScooterRentalApi.Data;
 
-namespace LameScooter.Api{
+namespace LameScooter.ScooterRentalApi{
     public class OfflineLameScooterRental : ILameScooterRental{
 
         readonly string databasePath = $"{Environment.CurrentDirectory}/DatabaseDummy/scooters.Json";
@@ -14,17 +14,18 @@ namespace LameScooter.Api{
         public OfflineLameScooterRental(){
             options = new JsonSerializerOptions{
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                };
+            };
         }
         
-        public Task<int> GetScooterCountInStation(string stationName){
+        public Task<IStation> GetScooterStation(string stationName){
             try{
-                var rawJson = File.ReadAllText(databasePath).Replace("\n","").Replace(" ", "");
+                var rawJson = File.ReadAllText(databasePath).Replace("\n", "").Trim().Replace(" +", "");
+                
                 var stations = JsonSerializer.Deserialize<List<Station>>(rawJson,options);
                 foreach (var station in stations.Where(station => station.Name == stationName)){
-                    return Task.FromResult(station.BikesAvailable);
+                    return Task.FromResult((IStation)station);
                 }
-                throw new ArgumentException($"Exception: {stationName} doesn't exist!");
+                throw new NotFoundException($"Exception: {stationName} doesn't exist!");
             }
             catch (Exception e){
                 Console.WriteLine(e);
@@ -32,13 +33,4 @@ namespace LameScooter.Api{
             }
         }
     }
-    //using Newtonsoft.Json.Serialization;
-    //In Constructor:
-    // options = new JsonSerializerSettings{
-    // ContractResolver = new CamelCasePropertyNamesContractResolver(),
-    // Formatting = Formatting.Indented
-    // };
-    //In method:
-    //var rawJson = File.ReadAllText(databasePath);
-    //var stations = JsonConvert.DeserializeObject<List<Station>>(rawJson, options);
 }
