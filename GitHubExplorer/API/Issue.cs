@@ -1,5 +1,3 @@
 ﻿namespace GitHubExplorer.API{
-    public class Issue{
-        
-    }
+    public class Issue{ }
 }

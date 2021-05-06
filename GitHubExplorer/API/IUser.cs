@@ -3,11 +3,11 @@ using GitHubExplorer.API.Data;
 
 namespace GitHubExplorer.API{
     public interface IUser {
-        string login{ get; }
-        string name {get;}
-        string bio{ get; }
-        string location {get;}
-        string company{ get; }
+        string Login{ get; }
+        string Name {get;}
+        string Bio{ get; }
+        string Location {get;}
+        string Company{ get; }
         string html_url{ get; }
         int public_repos{ get; }
         List<IRepository> Repositories{ get; }

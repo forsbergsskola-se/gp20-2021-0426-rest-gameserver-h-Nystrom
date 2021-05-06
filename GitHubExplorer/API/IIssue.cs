@@ -1,5 +1,3 @@
 ﻿namespace GitHubExplorer.API{
-    public interface IIssue{
-        
-    }
+    public interface IIssue{ }
 }

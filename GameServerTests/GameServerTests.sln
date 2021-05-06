@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyBrowser", "..\TinyBrows
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitHubExplorer", "..\GitHubExplorer\GitHubExplorer.csproj", "{EE8E1C08-EF9A-4FF5-BACF-C808FBD6EC59}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LameScooter", "..\LameScooter\LameScooter.csproj", "{AFEBB317-1E32-40BD-A265-D3647B4698A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{EE8E1C08-EF9A-4FF5-BACF-C808FBD6EC59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE8E1C08-EF9A-4FF5-BACF-C808FBD6EC59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE8E1C08-EF9A-4FF5-BACF-C808FBD6EC59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFEBB317-1E32-40BD-A265-D3647B4698A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFEBB317-1E32-40BD-A265-D3647B4698A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFEBB317-1E32-40BD-A265-D3647B4698A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFEBB317-1E32-40BD-A265-D3647B4698A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

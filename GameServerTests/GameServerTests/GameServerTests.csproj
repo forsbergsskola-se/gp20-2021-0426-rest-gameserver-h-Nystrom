@@ -15,6 +15,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\GitHubExplorer\GitHubExplorer.csproj" />
+      <ProjectReference Include="..\..\LameScooter\LameScooter.csproj" />
       <ProjectReference Include="..\..\TinyBrowser\TinyBrowser.csproj" />
     </ItemGroup>
 
