@@ -1,5 +1,6 @@
 ﻿namespace TinyBrowser.Api{
     public interface IWebsiteBrowser{
-        IWebPage GetWebPage(string host, int port);
+        bool GetWebPage(string host, int port);
+        void GetCurrentWebPage();
     }
 }

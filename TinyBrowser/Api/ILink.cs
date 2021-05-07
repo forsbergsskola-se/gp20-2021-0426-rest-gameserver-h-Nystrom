@@ -1,5 +1,5 @@
 ﻿namespace TinyBrowser.Api{
-    public interface ISubPage{
+    public interface ILink{
         string Uri{ get; }
         string Name{ get; }
     }

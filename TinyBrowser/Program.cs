@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Globalization;
 using TinyBrowser.Api;
-using TinyBrowser.Api.Data;
 
 namespace TinyBrowser{
     internal class Program{
@@ -8,33 +8,30 @@ namespace TinyBrowser{
         const int Port = 80;
 
         static void Main(string[] args){
-            IWebPage webPage;
             var websiteBrowser = GetBrowserOption();
-            try{
-                webPage = websiteBrowser.GetWebPage(Host, Port);
-            }
-            catch (Exception e){
-                Console.WriteLine(e.GetBaseException().Message);
+
+            if (!websiteBrowser.GetWebPage(Host, Port)){
+                Console.WriteLine("Shutting down");
                 return;
             }
-            Console.Clear();
+            websiteBrowser.GetCurrentWebPage();
             
-            DisplayCurrentWebPage(webPage);
-            
-            Console.WriteLine("\nOptions: \n1. Go to subPage, 2. Go back, 3. Exit");
-            
-            
+            Console.WriteLine("Stopped...");
             Console.ReadKey();
+            
         }
+        static int GetInput(int startIndex, int maxLenght){
+            var result = -1;
+            while (true){
+                if (int.TryParse(Console.ReadLine(), NumberStyles.Integer, null, out result) &&
+                    result == Math.Clamp(result, startIndex, maxLenght)){
+                    Console.Clear();
+                    return result;
+                }
 
-        static void DisplayCurrentWebPage(IWebPage webPage){
-            Console.WriteLine(webPage.Title);
-            Console.WriteLine($"Total subpages: {webPage.SubPages.Count}");
-            for (var i = 0; i < webPage.SubPages.Count; i++){
-                Console.WriteLine($"{i}: {webPage.SubPages[i].Uri} {webPage.SubPages[i].Name}");
+                Console.WriteLine($"Error: Needs to be a number between {startIndex} and {maxLenght}");
             }
         }
-
         static IWebsiteBrowser GetBrowserOption(){//TODO: Implement and change to using reflection!
             Console.WriteLine("Tiny browser:\nOptions: 1. Live, 2. Offline");
             while (true){
