@@ -5,18 +5,18 @@ using TinyBrowser.Api.Utility;
 
 namespace TinyBrowser.Api{
     public abstract class WebsiteBrowser{
-        protected IWebPage HomeWebPage;
-        protected List<IWebPage> WebPageHistory;
+        IWebPage homeWebPage;
+        List<IWebPage> webPageHistory;
         int currentIndex;
         
-        public int WebPageHtmlCount => HomeWebPage.HyperLinks.Count;
+        public int WebPageHtmlCount => webPageHistory[currentIndex].HyperLinks.Count;
 
         public bool CanReceiveWebPage(string host, int port){
             try{
                 var rawHtml = GetWebPageHtml(host, port);
-                HomeWebPage = rawHtml.ConvertHtmlToWebPage();
-                HomeWebPage = WebPages.SortPages(HomeWebPage, host);
-                WebPageHistory = new List<IWebPage>{HomeWebPage};
+                homeWebPage = rawHtml.ConvertHtmlToWebPage();
+                homeWebPage = WebPages.SortPages(homeWebPage, host);
+                webPageHistory = new List<IWebPage>{homeWebPage};
                 return true;
             }
             catch (Exception e){
@@ -26,24 +26,7 @@ namespace TinyBrowser.Api{
         }
 
         protected virtual string GetWebPageHtml(string host, int port){
-            return "";
-        }
-        
-        public string[] GetCurrentWebPage(){
-            Console.Clear();
-            var temp = WebPageHistory[currentIndex];
-            Console.WriteLine($"{temp.Title} {temp.Uri}");
-            Console.WriteLine("Html pages:");
-            for (var i = 0; i < temp.HyperLinks.Count; i++){
-                Console.WriteLine($"({i}) {temp.HyperLinks[i].Uri} {temp.HyperLinks[i].Name}");
-            }
-            Console.WriteLine("\nWeb pages:");
-            var index = 0;
-            foreach (var subPage in temp.SubPageDictionary){
-                Console.WriteLine($"({index}) {subPage.Key}/ {subPage.Value.Title} ");
-                index++;
-            }
-            return temp.SubPageDictionary.Keys.ToArray();
+            throw new NotImplementedException("Method not implemented!");
         }
         public bool TryGoBack(){
             if(currentIndex <= 0)
@@ -52,17 +35,17 @@ namespace TinyBrowser.Api{
             return true;
         }
         public bool TryGoForward(){
-            if(currentIndex >= WebPageHistory.Count-1)
+            if(currentIndex >= webPageHistory.Count-1)
                 return false;
             currentIndex++;
             return true;
         }
         public bool TrGoToSubPage(string uri){
-            if (!WebPageHistory[currentIndex].SubPageDictionary.ContainsKey(uri)) return false;
-            if(currentIndex < WebPageHistory.Count-1)
-                WebPageHistory.RemoveRange(currentIndex+1,WebPageHistory.Count-currentIndex-1);
+            if (!webPageHistory[currentIndex].SubPageDictionary.ContainsKey(uri)) return false;
+            if(currentIndex < webPageHistory.Count-1)
+                webPageHistory.RemoveRange(currentIndex+1,webPageHistory.Count-currentIndex-1);
             
-            WebPageHistory.Add(WebPageHistory[currentIndex].SubPageDictionary[uri]);
+            webPageHistory.Add(webPageHistory[currentIndex].SubPageDictionary[uri]);
             currentIndex++;
             return true;
         }
@@ -73,8 +56,30 @@ namespace TinyBrowser.Api{
 
         public void GetSearchHistory(){
             Console.WriteLine("Search history: ");
-            for (int i = 0; i < WebPageHistory.Count; i++){
-                Console.WriteLine($"({i}) {WebPageHistory[i].Uri} {WebPageHistory[i].Title}");
+            for (var i = 0; i < webPageHistory.Count; i++){
+                Console.WriteLine($"({i}) {webPageHistory[i].Uri} {webPageHistory[i].Description}");
+            }
+        }
+        public string[] GetCurrentWebPage(){
+            Console.Clear();
+            var temp = webPageHistory[currentIndex];
+            DisplayHyperLinks(temp);
+            DisplaySubPages(temp);
+            return temp.SubPageDictionary.Keys.ToArray();
+        }
+        static void DisplaySubPages(IWebPage temp){
+            Console.WriteLine("\nWeb pages:");
+            var index = 0;
+            foreach (var (pathName, webPage) in temp.SubPageDictionary){
+                Console.WriteLine($"({index}) {pathName}/ {webPage.Title} ");
+                index++;
+            }
+        }
+        static void DisplayHyperLinks(IWebPage temp){
+            Console.WriteLine($"{temp.Description} {temp.Uri}");
+            Console.WriteLine("Html pages:");
+            for (var i = 0; i < temp.HyperLinks.Count; i++){
+                Console.WriteLine($"({i}) {temp.HyperLinks[i].Uri} {temp.HyperLinks[i].Description}");
             }
         }
     }

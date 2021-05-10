@@ -28,8 +28,8 @@ namespace TinyBrowser.Api.Utility{
             resultIndex = RawHtml.IndexOf(tag, startIndex, StringComparison.OrdinalIgnoreCase);
             return resultIndex <= -1;
         }
-        static List<ILink> GetAllContent(string startTag, string endTag){
-            var subPages = new List<ILink>();
+        static List<IHyperLink> GetAllContent(string startTag, string endTag){
+            var subPages = new List<IHyperLink>();
             while (true){
                 var link = GetFirstContent(startTag, endTag);
                 if(link == "")
@@ -41,13 +41,13 @@ namespace TinyBrowser.Api.Utility{
             return subPages;
         }
         class WebPageData : IWebPage{
-            public string Title{ get; }
             public string Uri{ get; }
-            public List<ILink> HyperLinks{ get; }
+            public string Description{ get; }
+            public List<IHyperLink> HyperLinks{ get; }
             public Dictionary<string, WebPages> SubPageDictionary{ get; }
 
-            public WebPageData(string title, List<ILink> links){
-                Title = title;
+            public WebPageData(string description, List<IHyperLink> links){
+                Description = description;
                 HyperLinks = links;
             }
         }
