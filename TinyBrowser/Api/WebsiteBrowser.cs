@@ -10,6 +10,7 @@ namespace TinyBrowser.Api{
         int currentIndex;
         
         public int WebPageHtmlCount => webPageHistory[currentIndex].HyperLinks.Count;
+        public string GetCurrentWebPageUri => webPageHistory[currentIndex].Uri;
 
         public bool CanReceiveWebPage(string host, string uri, int port){
             try{
@@ -22,7 +23,7 @@ namespace TinyBrowser.Api{
             }
             catch (Exception e){
                 Console.WriteLine(e.Message);
-                return false;
+                throw;
             }
         }
 
@@ -56,32 +57,37 @@ namespace TinyBrowser.Api{
             return CanReceiveWebPage(host, uri, port);
         }
 
-        public void GetSearchHistory(){
+        public void GetSearchHistory(){//TODO:Fix!
             Console.WriteLine("Search history: ");
             for (var i = 0; i < webPageHistory.Count; i++){
-                Console.WriteLine($"({i}) {webPageHistory[i].Uri} {webPageHistory[i].Description}");
+                Console.WriteLine($"({i}){webPageHistory[i].Uri} {webPageHistory[i].Description}");
             }
         }
         public string[] GetCurrentWebPage(){
-            var temp = webPageHistory[currentIndex];
-            DisplayHyperLinks(temp);
-            DisplaySubPages(temp);
-            return temp.SubPageDictionary.Keys.ToArray();
+            return webPageHistory[currentIndex].SubPageDictionary.Keys.ToArray();
         }
-        static void DisplaySubPages(IWebPage temp){
-            Console.WriteLine("\nWeb pages:");
+
+        public void DisplayContent(){
+            DisplayHyperLinks();
+            DisplaySubPages();
+        }
+        public void DisplaySubPages(){
+            var temp = webPageHistory[currentIndex];
             var index = 0;
+            var webPages = "Web pages: \n";
             foreach (var (pathName, webPage) in temp.SubPageDictionary){
-                Console.WriteLine($"({index}) {pathName}/ {webPage.Title} ");
+                webPages += $"({index}) {pathName}/ {webPage.Title}\n";
                 index++;
             }
+            Console.WriteLine(webPages);
         }
-        static void DisplayHyperLinks(IWebPage temp){
-            Console.WriteLine($"{temp.Description} {temp.Uri}");
-            Console.WriteLine("Html pages:");
+        public void DisplayHyperLinks(){
+            var temp = webPageHistory[currentIndex];
+            var hyperLinks = $"{temp.Description} {temp.Uri}\nHtml pages:\n";
             for (var i = 0; i < temp.HyperLinks.Count; i++){
-                Console.WriteLine($"({i}) {temp.HyperLinks[i].Uri} {temp.HyperLinks[i].Description}");
+                hyperLinks += $"({i}) {temp.HyperLinks[i].Uri} {temp.HyperLinks[i].Description}\n";
             }
+            Console.WriteLine(hyperLinks);
         }
     }
 }

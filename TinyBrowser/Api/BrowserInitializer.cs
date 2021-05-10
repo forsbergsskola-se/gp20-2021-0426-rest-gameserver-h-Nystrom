@@ -3,11 +3,11 @@
 namespace TinyBrowser.Api{
     public class BrowserInitializer{
 
-        public static IWebsiteBrowser GetBrowser(ConsoleKey playerInput){
+        public static IWebsiteBrowser GetBrowser(int playerInput){
             switch (playerInput){
-                    case ConsoleKey.D1:
+                    case 1:
                         return new OnlineWebsiteBrowser();
-                    case ConsoleKey.D2:
+                    case 2:
                         return new OfflineWebsiteBrowser();
             }
             throw new ArgumentException("Accepted inputs are: 1 or 2");
