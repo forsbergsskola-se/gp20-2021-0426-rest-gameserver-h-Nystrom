@@ -76,7 +76,7 @@ namespace TinyBrowser.Api{
             var index = 0;
             var webPages = "Web pages: \n";
             foreach (var (pathName, webPage) in temp.SubPageDictionary){
-                webPages += $"({index}) {pathName}/ {webPage.Title}\n";
+                webPages += $"({index}) {pathName}/ {webPage.Title.TryShorten()}\n";
                 index++;
             }
             Console.WriteLine(webPages);

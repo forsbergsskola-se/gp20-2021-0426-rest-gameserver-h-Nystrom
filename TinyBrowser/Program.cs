@@ -8,8 +8,7 @@ using TinyBrowser.Api;
 namespace TinyBrowser{
     internal class Program{
         //TODO: 1. Clean up code!
-        //TODO: 2. Fix search history!
-        //TODO: 3. Split long descriptions!
+        //TODO: 2. XMLReader 
         
         
         const string Host = "acme.com";
@@ -42,7 +41,7 @@ namespace TinyBrowser{
             } while (continueFlag);
             
             Console.Clear();
-            Console.WriteLine("Shutting down2!");
+            Console.WriteLine("Shutting down!");
         }
         static void Run(int input, IReadOnlyList<string> uriPages){
             switch (input){
@@ -77,6 +76,7 @@ namespace TinyBrowser{
                 return;
             }
             websiteBrowser.DisplayHyperLinks();
+            Console.WriteLine($"Select hyperlink between 0 and {websiteBrowser.WebPageHtmlCount - 1}");
             var indexInput = GetInput(0, websiteBrowser.WebPageHtmlCount - 1);
             websiteBrowser.TryGoToHtmlIndex(indexInput, Port);
             Console.Clear();
