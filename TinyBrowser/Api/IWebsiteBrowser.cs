@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace TinyBrowser.Api{
+﻿namespace TinyBrowser.Api{
     public interface IWebsiteBrowser{
         int WebPageHtmlCount{ get; }
         bool CanReceiveWebPage(string host, int port);
@@ -8,7 +6,7 @@ namespace TinyBrowser.Api{
         bool TryGoBack();
         bool TryGoForward();
         bool TrGoToSubPage(string uri);
-        bool TryGoToHtmlIndex(int index);
+        bool TryGoToHtmlIndex(int index, int port);
         void GetSearchHistory();
     }
 }

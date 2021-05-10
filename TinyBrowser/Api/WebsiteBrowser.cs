@@ -4,7 +4,7 @@ using System.Linq;
 using TinyBrowser.Api.Utility;
 
 namespace TinyBrowser.Api{
-    public abstract class WebsiteBrowser{
+    public abstract class WebsiteBrowser : IWebsiteBrowser{
         IWebPage homeWebPage;
         List<IWebPage> webPageHistory;
         int currentIndex;
@@ -49,9 +49,8 @@ namespace TinyBrowser.Api{
             currentIndex++;
             return true;
         }
-
-        public bool TryGoToHtmlIndex(int index){
-            throw new NotImplementedException();
+        public bool TryGoToHtmlIndex(int index, int port){
+            return CanReceiveWebPage(webPageHistory[currentIndex].HyperLinks[index].Uri, port);
         }
 
         public void GetSearchHistory(){
@@ -61,7 +60,6 @@ namespace TinyBrowser.Api{
             }
         }
         public string[] GetCurrentWebPage(){
-            Console.Clear();
             var temp = webPageHistory[currentIndex];
             DisplayHyperLinks(temp);
             DisplaySubPages(temp);

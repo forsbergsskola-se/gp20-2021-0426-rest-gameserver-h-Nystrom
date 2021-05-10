@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using TinyBrowser.Api.Utility;
 
 namespace TinyBrowser.Api{
-    public class OfflineWebsiteBrowser : WebsiteBrowser, IWebsiteBrowser{
+    public class OfflineWebsiteBrowser : WebsiteBrowser{
         static readonly string Path = Environment.CurrentDirectory;
         
         protected override string GetWebPageHtml(string host, int port){

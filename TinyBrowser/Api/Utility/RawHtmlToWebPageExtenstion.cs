@@ -3,11 +3,10 @@ using System.Collections.Generic;
 
 namespace TinyBrowser.Api.Utility{
     public static class RawHtmlToWebPageExtenstion{
-        static string RawHtml;
-        static int currentIndex;
+        static string _rawHtml;
 
         public static IWebPage ConvertHtmlToWebPage(this string rawHtml){
-            RawHtml = rawHtml;
+            _rawHtml = rawHtml;
             var title = GetFirstContent("<title>", "</title>");
             var links = GetAllContent("<a href=\"", "</a>");
             return new WebPageData(title, links);
@@ -20,12 +19,12 @@ namespace TinyBrowser.Api.Utility{
             if (TryGetIndexOf(endTag, firstIndex, out var lastIndex))
                 return "";
             
-            var link = RawHtml.Substring(firstIndex, lastIndex - firstIndex);
-            RawHtml = RawHtml.Remove(0, lastIndex);
+            var link = _rawHtml.Substring(firstIndex, lastIndex - firstIndex);
+            _rawHtml = _rawHtml.Remove(0, lastIndex);
             return link;
         }
         static bool TryGetIndexOf(string tag, int startIndex, out int resultIndex){
-            resultIndex = RawHtml.IndexOf(tag, startIndex, StringComparison.OrdinalIgnoreCase);
+            resultIndex = _rawHtml.IndexOf(tag, startIndex, StringComparison.OrdinalIgnoreCase);
             return resultIndex <= -1;
         }
         static List<IHyperLink> GetAllContent(string startTag, string endTag){

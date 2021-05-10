@@ -2,7 +2,7 @@
 using System.Net.Sockets;
 
 namespace TinyBrowser.Api{
-    public class OnlineWebsiteBrowser : WebsiteBrowser, IWebsiteBrowser{
+    public class OnlineWebsiteBrowser : WebsiteBrowser{
         
         protected override string GetWebPageHtml(string host, int port){
             var tcpClient = new TcpClient(host, port);
