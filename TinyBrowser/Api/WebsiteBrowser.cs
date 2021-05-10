@@ -6,17 +6,18 @@ using TinyBrowser.Api.Utility;
 namespace TinyBrowser.Api{
     public abstract class WebsiteBrowser : IWebsiteBrowser{
         IWebPage homeWebPage;
-        List<IWebPage> webPageHistory;
+        List<IWebPage> webPageHistory = new List<IWebPage>();
         int currentIndex;
         
         public int WebPageHtmlCount => webPageHistory[currentIndex].HyperLinks.Count;
 
-        public bool CanReceiveWebPage(string host, int port){
+        public bool CanReceiveWebPage(string host, string uri, int port){
             try{
-                var rawHtml = GetWebPageHtml(host, port);
+                var rawHtml = GetWebPageHtml(host, uri, port);
                 homeWebPage = rawHtml.ConvertHtmlToWebPage();
                 homeWebPage = WebPages.SortPages(homeWebPage, host);
-                webPageHistory = new List<IWebPage>{homeWebPage};
+                webPageHistory.Add(homeWebPage);
+                currentIndex = webPageHistory.Count-1;
                 return true;
             }
             catch (Exception e){
@@ -25,7 +26,7 @@ namespace TinyBrowser.Api{
             }
         }
 
-        protected virtual string GetWebPageHtml(string host, int port){
+        protected virtual string GetWebPageHtml(string host,string uri, int port){
             throw new NotImplementedException("Method not implemented!");
         }
         public bool TryGoBack(){
@@ -50,7 +51,9 @@ namespace TinyBrowser.Api{
             return true;
         }
         public bool TryGoToHtmlIndex(int index, int port){
-            return CanReceiveWebPage(webPageHistory[currentIndex].HyperLinks[index].Uri, port);
+            var uri = webPageHistory[currentIndex].HyperLinks[index].Uri;
+            var host = homeWebPage.Uri;
+            return CanReceiveWebPage(host, uri, port);
         }
 
         public void GetSearchHistory(){

@@ -5,13 +5,18 @@ using TinyBrowser.Api;
 
 namespace TinyBrowser{
     internal class Program{
+        //TODO: 1. Clean up code!
+        //TODO: 2. Fix search history!
+        //TODO: 3. Split long descriptions!
+        
+        
         const string Host = "acme.com";
         const int Port = 80;
         static IWebsiteBrowser websiteBrowser;
         static void Main(string[] args){
 
             websiteBrowser = TryGetBrowser();
-            if (!websiteBrowser.CanReceiveWebPage(Host, Port)){
+            if (!websiteBrowser.CanReceiveWebPage(Host, "",Port)){
                 Console.WriteLine("Program is shutting down!");
                 return;
             }
@@ -19,11 +24,14 @@ namespace TinyBrowser{
                 
                 var uriPages = websiteBrowser.GetCurrentWebPage();
                 var optionsMenu = new[] {
-                    "\nOptions: ", $"1. Go to link({websiteBrowser.WebPageHtmlCount}), ", $"2. Go to sub-page({uriPages.Length}), ", "3. Go forward, ", "4. Go back, ",
-                    "5. Search history, ", "6. Exit.\n"
-                };
+                    "Options: ", $"1. Go to link({websiteBrowser.WebPageHtmlCount})", $"2. Go to sub-page({uriPages.Length})", "3. Go forward", "4. Go back",
+                    "5. Search history"};
                 var input = NavigationOptions(optionsMenu);
                 Run(input, uriPages);
+                Console.WriteLine("Press Space to exit, press any other key to continue!");
+                if(GetConsoleKey() == ConsoleKey.Spacebar)
+                    return;
+                Console.Clear();
             }
         }
 
@@ -46,7 +54,6 @@ namespace TinyBrowser{
                         Console.WriteLine($"Select sub-page between 0 and {uriPages.Count - 1}");
                         var linkOption2 = GetInput(0, uriPages.Count - 1);
                         websiteBrowser.TrGoToSubPage(uriPages[linkOption2]);
-                            
                         break;
                     case 3:
                         if (!websiteBrowser.TryGoForward()){
@@ -54,7 +61,7 @@ namespace TinyBrowser{
                         }
                         break;
                     case 4:
-                        if (websiteBrowser.TryGoBack()){
+                        if (!websiteBrowser.TryGoBack()){
                             Console.WriteLine("Can't go back!");
                         }
                         break;
@@ -62,18 +69,12 @@ namespace TinyBrowser{
                         Console.WriteLine("Show search history");
                         websiteBrowser.GetSearchHistory();
                         break;
-                    case 6:
-                        Console.WriteLine("Quit");
-                        return;
-                }
-            Console.WriteLine("Press any key to continue");
-            Console.ReadKey();
-            Console.Clear();
+            }
         }
 
         static IWebsiteBrowser TryGetBrowser(){
             while (true){
-                Console.WriteLine("Tiny browser:\nOptions: 1. Live, 2. Offline");
+                Console.WriteLine("Tiny browser:Options: 1. Live, 2. Offline");
                 try{
                     return BrowserInitializer.GetBrowser(GetConsoleKey());
                 }
@@ -87,6 +88,7 @@ namespace TinyBrowser{
             while (true){
                 if (int.TryParse(Console.ReadLine(), NumberStyles.Integer, null, out result) &&
                     result == Math.Clamp(result, startIndex, maxLenght)){
+                    Console.Clear();
                     return result;
                 }
                 Console.WriteLine($"Error: Needs to be a number between {startIndex} and {maxLenght}");
@@ -94,13 +96,15 @@ namespace TinyBrowser{
         }
         static int NavigationOptions(IReadOnlyCollection<string> options){
             foreach (var option in options){
-                Console.Write(option);
+                Console.WriteLine(option);
             }
             var inputValue = GetInput(1, options.Count);
+            Console.Clear();
             return inputValue;
         }
         static ConsoleKey GetConsoleKey(){
             var keyInfo = Console.ReadKey();
+            Console.Clear();
             return keyInfo.Key;
         }
     }

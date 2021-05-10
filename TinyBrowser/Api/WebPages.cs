@@ -27,7 +27,7 @@ namespace TinyBrowser.Api{
                         sortedWebPage.HyperLinks.Add(link);
                     }
                     else{
-                        sortedWebPage.SubPageDictionary.Add(splitLink[0], 
+                        sortedWebPage.SubPageDictionary.TryAdd(splitLink[0], 
                             new WebPages(link.Description, splitLink[0]));
                     }
                 }
