@@ -70,7 +70,7 @@ namespace TinyBrowser{
             while (true){
                 switch (GetConsoleKey()){
                     case ConsoleKey.D1:
-                        return new WebsiteBrowser();
+                        return new OnlineWebsiteBrowser();
                     case ConsoleKey.D2:
                         return new OfflineWebsiteBrowser();
                 }
