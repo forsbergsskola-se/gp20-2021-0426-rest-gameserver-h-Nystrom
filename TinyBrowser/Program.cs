@@ -10,11 +10,44 @@ namespace TinyBrowser{
         static void Main(string[] args){
             var websiteBrowser = GetBrowserOption();
 
-            if (!websiteBrowser.GetWebPage(Host, Port)){
+            if (!websiteBrowser.CanReceiveWebPage(Host, Port)){
                 Console.WriteLine("Shutting down");
                 return;
             }
+            //TODO: Options: F forward, B back,G Goto html,S Goto subpage, escape exit, H history,
+            
+            
+            var uriPages = websiteBrowser.GetCurrentWebPage();
+            Console.ReadKey();
+            websiteBrowser.TrGoToSubPage(uriPages[0]);
             websiteBrowser.GetCurrentWebPage();
+            Console.ReadKey();
+            websiteBrowser.TryGoBack();
+            websiteBrowser.GetCurrentWebPage();
+            Console.ReadKey();
+            websiteBrowser.TrGoToSubPage(uriPages[6]);
+            websiteBrowser.GetCurrentWebPage();
+            Console.ReadKey();
+            websiteBrowser.TrGoToSubPage(uriPages[8]);
+            websiteBrowser.GetCurrentWebPage();
+            Console.ReadKey();
+            websiteBrowser.GetSearchHistory();//2st
+            Console.ReadKey();
+            websiteBrowser.TryGoBack();
+            websiteBrowser.GetCurrentWebPage();
+            Console.ReadKey();
+            websiteBrowser.TryGoForward();
+            websiteBrowser.GetCurrentWebPage();
+            Console.ReadKey();
+            websiteBrowser.TrGoToSubPage(uriPages[2]);
+            websiteBrowser.GetCurrentWebPage();
+            Console.ReadKey();
+            websiteBrowser.GetSearchHistory();//2st
+            Console.ReadKey();
+            websiteBrowser.TryGoForward();
+            websiteBrowser.GetCurrentWebPage();
+            Console.ReadKey();
+            websiteBrowser.GetSearchHistory();//2st
             
             Console.WriteLine("Stopped...");
             Console.ReadKey();

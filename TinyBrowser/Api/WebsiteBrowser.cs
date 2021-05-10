@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using TinyBrowser.Api.Utility;
@@ -6,7 +7,11 @@ using TinyBrowser.Api.Utility;
 namespace TinyBrowser.Api{
     public class WebsiteBrowser : IWebsiteBrowser{
         IWebPage webPage;
-        public bool GetWebPage(string host, int port){
+
+        public int WebPageSubPageCount{ get; }
+        public int WebPageHtmlCount{ get; }
+
+        public bool CanReceiveWebPage(string host, int port){
             var tcpClient = new TcpClient(host, port);
             var stream = tcpClient.GetStream();
             var streamWriter = new StreamWriter(stream){
@@ -16,11 +21,31 @@ namespace TinyBrowser.Api{
             var streamReader = new StreamReader(stream);
             var rawHtml = streamReader.ReadToEnd();
             tcpClient.Close();
-            webPage = rawHtml.ConvertHtmlToWebPage(host);
+            webPage = rawHtml.ConvertHtmlToWebPage();
             return true;
         }
 
-        public void GetCurrentWebPage(){
+        public string[] GetCurrentWebPage(){
+            throw new NotImplementedException();
+        }
+
+        public bool TryGoBack(){
+            throw new NotImplementedException();
+        }
+
+        public bool TryGoForward(){
+            throw new NotImplementedException();
+        }
+
+        public bool TrGoToSubPage(string uri){
+            throw new NotImplementedException();
+        }
+
+        public bool TryGoToHtmlIndex(int index){
+            throw new NotImplementedException();
+        }
+
+        public void GetSearchHistory(){
             throw new NotImplementedException();
         }
     }

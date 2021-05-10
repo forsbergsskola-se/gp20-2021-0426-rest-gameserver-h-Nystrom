@@ -1,35 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security;
-using TinyBrowser.Api.Data;
 
 namespace TinyBrowser.Api.Utility{
     public static class RawHtmlToWebPageExtenstion{
         static string RawHtml;
         static int currentIndex;
 
-        public static WebPageInitializer ConvertHtmlToWebPage(this string rawHtml, string uri){
+        public static IWebPage ConvertHtmlToWebPage(this string rawHtml){
             RawHtml = rawHtml;
-            rawHtml = "";
             var title = GetFirstContent("<title>", "</title>");
             var links = GetAllContent("<a href=\"", "</a>");
-            return WebPageInitializer.Create(links, title);
+            return new WebPageData(title, links);
         }
         static string GetFirstContent(string startTag, string endTag){
-            var firstIndex = RawHtml.IndexOf(startTag, 0, StringComparison.OrdinalIgnoreCase) +
-                             startTag.Length;
-            if (firstIndex == -1)
+            if (TryGetIndexOf(startTag, 0, out var firstIndex))
                 return "";
-            var lastIndex = RawHtml.IndexOf(endTag, firstIndex, StringComparison.OrdinalIgnoreCase);
-            if (lastIndex == -1)
+            firstIndex += startTag.Length;
+            
+            if (TryGetIndexOf(endTag, firstIndex, out var lastIndex))
                 return "";
+            
             var link = RawHtml.Substring(firstIndex, lastIndex - firstIndex);
             RawHtml = RawHtml.Remove(0, lastIndex);
             return link;
         }
-
-        static List<Link> GetAllContent(string startTag, string endTag){
-            var subPages = new List<Link>();
+        static bool TryGetIndexOf(string tag, int startIndex, out int resultIndex){
+            resultIndex = RawHtml.IndexOf(tag, startIndex, StringComparison.OrdinalIgnoreCase);
+            return resultIndex <= -1;
+        }
+        static List<ILink> GetAllContent(string startTag, string endTag){
+            var subPages = new List<ILink>();
             while (true){
                 var link = GetFirstContent(startTag, endTag);
                 if(link == "")
@@ -39,6 +39,17 @@ namespace TinyBrowser.Api.Utility{
                 subPages.Add(link.ConvertToSubPage());
             }
             return subPages;
+        }
+        class WebPageData : IWebPage{
+            public string Title{ get; }
+            public string Uri{ get; }
+            public List<ILink> HyperLinks{ get; }
+            public Dictionary<string, WebPages> SubPageDictionary{ get; }
+
+            public WebPageData(string title, List<ILink> links){
+                Title = title;
+                HyperLinks = links;
+            }
         }
     }
 }
