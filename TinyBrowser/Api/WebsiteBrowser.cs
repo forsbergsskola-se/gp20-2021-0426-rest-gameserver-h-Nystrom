@@ -16,14 +16,15 @@ namespace TinyBrowser.Api{
             try{
                 var rawHtml = GetWebPageHtml(host, uri, port);
                 homeWebPage = rawHtml.ConvertHtmlToWebPage();
-                homeWebPage = WebPages.SortPages(homeWebPage, host);
+                uri = uri == "" ? host : $"{host}/{uri}";
+                homeWebPage = WebPages.SortPages(homeWebPage, uri);
                 webPageHistory.Add(homeWebPage);
-                currentIndex = webPageHistory.Count-1;
+                currentIndex = webPageHistory.IndexOf(homeWebPage);
                 return true;
             }
             catch (Exception e){
                 Console.WriteLine(e.Message);
-                throw;
+                return false;
             }
         }
 
@@ -34,42 +35,48 @@ namespace TinyBrowser.Api{
             if(currentIndex <= 0)
                 return false;
             currentIndex--;
+            Console.WriteLine(webPageHistory[currentIndex].Uri);
             return true;
         }
         public bool TryGoForward(){
             if(currentIndex >= webPageHistory.Count-1)
                 return false;
             currentIndex++;
+            Console.WriteLine(webPageHistory[currentIndex].Uri);
             return true;
         }
-        public bool TrGoToSubPage(string uri){
-            if (!webPageHistory[currentIndex].SubPageDictionary.ContainsKey(uri)) return false;
+        public void TrGoToSubPage(string uri){
+            if (!webPageHistory[currentIndex].SubPageDictionary.ContainsKey(uri)) return;
             if(currentIndex < webPageHistory.Count-1)
                 webPageHistory.RemoveRange(currentIndex+1,webPageHistory.Count-currentIndex-1);
-            
             webPageHistory.Add(webPageHistory[currentIndex].SubPageDictionary[uri]);
             currentIndex++;
-            return true;
         }
-        public bool TryGoToHtmlIndex(int index, int port){
+        public void TryGoToHtmlIndex(int index, int port){
             var uri = webPageHistory[currentIndex].HyperLinks[index].Uri;
-            var host = homeWebPage.Uri;
-            return CanReceiveWebPage(host, uri, port);
+
+            if (!webPageHistory[currentIndex].Uri.Contains(".html")){
+                CanReceiveWebPage(webPageHistory[currentIndex].Uri, uri, port);
+                return;
+            } 
+                
+            
+            var lastIndexOf = webPageHistory[currentIndex].Uri.LastIndexOf("/");
+            if (lastIndexOf <= -1)
+                return;
+            var noHtml = webPageHistory[currentIndex].Uri.Substring(0, lastIndexOf);
+            CanReceiveWebPage(noHtml, uri, port);
         }
 
-        public void GetSearchHistory(){//TODO:Fix!
+        public void GetSearchHistory(){
             Console.WriteLine("Search history: ");
             for (var i = 0; i < webPageHistory.Count; i++){
-                Console.WriteLine($"({i}){webPageHistory[i].Uri} {webPageHistory[i].Description}");
+                var indicator = i == currentIndex ? ">" : "";
+                Console.WriteLine($"{indicator}({i}){webPageHistory[i].Uri} {webPageHistory[i].Description}");
             }
         }
         public string[] GetCurrentWebPage(){
             return webPageHistory[currentIndex].SubPageDictionary.Keys.ToArray();
-        }
-
-        public void DisplayContent(){
-            DisplayHyperLinks();
-            DisplaySubPages();
         }
         public void DisplaySubPages(){
             var temp = webPageHistory[currentIndex];

@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using TinyBrowser.Api;
 
 namespace TinyBrowser{
     internal class Program{
-        //TODO: 1. Clean up code!
-        //TODO: 2. XMLReader 
-        
-        
+        //TODO: If I have time: refactor and code clean up.
+
         const string Host = "acme.com";
         const int Port = 80;
         static IWebsiteBrowser websiteBrowser;
@@ -97,8 +94,8 @@ namespace TinyBrowser{
         static IWebsiteBrowser TryGetBrowser(){
             while (true){
                 try{
-                    Console.WriteLine("Tiny browser:\nOptions: 1. Live, 2. Offline");
-                    var input = GetInput(1, 2);
+                    Console.WriteLine("Tiny browser:\nOptions: 1. Live, 2. Offline, 3. XmlReader");
+                    var input = GetInput(1, BrowserInitializer.Options);
                     Console.Clear();
                     return BrowserInitializer.GetBrowser(input);
                 }

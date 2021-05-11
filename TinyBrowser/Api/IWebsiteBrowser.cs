@@ -6,10 +6,9 @@
         string[] GetCurrentWebPage();
         bool TryGoBack();
         bool TryGoForward();
-        bool TrGoToSubPage(string uri);
-        bool TryGoToHtmlIndex(int index, int port);
+        void TrGoToSubPage(string uri);
+        void TryGoToHtmlIndex(int index, int port);
         void GetSearchHistory();
-        void DisplayContent();
         void DisplaySubPages();
         void DisplayHyperLinks();
         

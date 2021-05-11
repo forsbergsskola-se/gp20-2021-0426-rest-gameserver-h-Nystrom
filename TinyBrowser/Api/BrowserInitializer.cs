@@ -1,16 +1,16 @@
 ﻿using System;
 
 namespace TinyBrowser.Api{
-    public class BrowserInitializer{
-
+    public struct BrowserInitializer{
+        
+        public const int Options = 3;
         public static IWebsiteBrowser GetBrowser(int playerInput){
-            switch (playerInput){
-                    case 1:
-                        return new OnlineWebsiteBrowser();
-                    case 2:
-                        return new OfflineWebsiteBrowser();
-            }
-            throw new ArgumentException("Accepted inputs are: 1 or 2");
+            return playerInput switch{
+                1 => new OnlineWebsiteBrowser(),
+                2 => new OfflineWebsiteBrowser(),
+                3 => new WebRequestWebsiteBrowser(),
+                _ => throw new ArgumentException("Accepted inputs are: 1 to 3")
+            };
         }
     }
 }

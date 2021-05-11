@@ -28,7 +28,7 @@ namespace TinyBrowser.Api{
                     }
                     else{
                         sortedWebPage.SubPageDictionary.TryAdd(splitLink[0], 
-                            new WebPages(link.Description, sortedWebPage.Uri+ "/"+link.Uri));//TODO: Test
+                            new WebPages(link.Description, sortedWebPage.Uri+ "/"+link.Uri));
                     }
                 }
                 else{
