@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace GitHubExplorer.API{
     public class User : GitHubRequester, IUser{
@@ -19,7 +17,7 @@ namespace GitHubExplorer.API{
         public string updated_at { get; set; }
         public IRepository GetRepository(string repositoryName){
             try{
-                return Run<Repository>($"repos/{Login}/{repositoryName}");
+                return Request<Repository>($"repos/{Login}/{repositoryName}");
             }
             catch (Exception e){
                 Console.WriteLine(e.GetBaseException().Message);

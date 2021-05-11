@@ -5,7 +5,7 @@ namespace GitHubExplorer.API{
         public GitHubApi(string token2) : base(token2){ }
         public IUser GetUser(string userName){
             try{
-                return Run<User>($"users/{userName}");
+                return Request<User>($"users/{userName}");
             }
             catch (Exception e){
                 Console.WriteLine(e.GetBaseException().Message);

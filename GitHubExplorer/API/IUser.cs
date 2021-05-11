@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using GitHubExplorer.API.Data;
-
-namespace GitHubExplorer.API{
+﻿namespace GitHubExplorer.API{
     public interface IUser {
         string Login{ get; }
         string Name {get;}

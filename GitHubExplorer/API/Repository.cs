@@ -22,12 +22,19 @@ namespace GitHubExplorer.API{
         public string issue_events_url{ get; set; }
 
         public IIssue CreateIssue(string title, string description){
-            throw new NotImplementedException();
+            try{
+                var issue = Request<Issue>($"repos/{full_Name}/issues",new PostMessage(title, description));
+                return issue;
+            }
+            catch (Exception e){
+                Console.WriteLine(e.GetBaseException().Message);
+                throw;
+            }
         }
 
         public List<IIssue> GetIssues(){
             try{
-                var issues = Run<List<Issue>>($"repos/{full_Name}/issues");
+                var issues = Request<List<Issue>>($"repos/{full_Name}/issues");
                 return issues.Cast<IIssue>().ToList();
             }
             catch (Exception e){
