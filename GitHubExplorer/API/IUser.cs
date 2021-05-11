@@ -10,7 +10,6 @@ namespace GitHubExplorer.API{
         string Company{ get; }
         string html_url{ get; }
         int public_repos{ get; }
-        List<IRepository> Repositories{ get; }
-        void DisplayInfo();
+        List<IRepository> GetRepositories{ get; }
     }
 }

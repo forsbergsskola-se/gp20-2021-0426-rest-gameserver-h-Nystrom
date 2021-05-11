@@ -1,127 +1,52 @@
 ﻿using System;
-using System.Globalization;
+using System.Collections.Generic;
 using GitHubExplorer.API;
 
 namespace GitHubExplorer{
     internal class Program{
-        static IUser _userProfile;
-        static IGitHubApi _gitHubApi;
-
+        //TODO: Get issues and create/publish issues!
+        //TODO: Refactor!
+        
+        static IUser userProfile;
+        static List<IRepository> repositories;
+        static List<IIssue> issues;
+        static IGitHubApi gitHubApi;
+        
         static void Main(string[] args){
-            while (true){
-                Console.WriteLine("Authorization:");
-                InitializeApi();
-                if (FindUser())
-                    break;
-                if (ExitApplication())
-                    return;
-            }
 
-            //TODO: Refactor this!
-            while (true)
-                switch (SelectUserOption()){
-                    case 1:
-                        while (true){
-                            var repositoryIndex = SelectRepository();
-                            _userProfile.Repositories[repositoryIndex].DisplayInfo();
-                            Console.WriteLine("\r\nOptions:\r\n1. Repositories, 2. User profile, 3: Quit");
-                            var repositoryOption = GetInput(1, 3);
-                            if (repositoryOption == 2) break;
-                            if (repositoryOption == 3){
-                                Console.Clear();
-                                Console.WriteLine("Quitting!");
-                                return;
-                            }
-                        }
-
-                        break;
-                    case 2:
-                        while (!FindUser())
-                            if (ExitApplication())
-                                return;
-                        Console.WriteLine("Not implemented");
-                        break;
-                    case 3:
-                        Console.Clear();
-                        Console.WriteLine("Quitting!");
-                        return;
-                }
+            Authenticate();
+            if (!TryGetUser()) 
+                return;
+            repositories = userProfile.GetRepositories;
+            
+            Console.WriteLine(userProfile.Name);
+            Console.WriteLine(userProfile.GetRepositories.Count);
+            // Console.WriteLine(repositories[0].open_issues);
+            // issues = repositories[0].GetIssues();
+            
+            Console.WriteLine("Shutting down");
+            Console.ReadKey();
         }
 
-        static void InitializeApi(){
-            Console.Write("Enter gitHub api-key: ");
+        static void Authenticate(){
+            Console.Write("Enter GitHub-API token: ");
             var token = Console.ReadLine();
-            _gitHubApi = new GitHubApi(token);
+            gitHubApi = new GitHubApi(token);
         }
 
-        static bool FindUser(){
-            Console.Write("Enter a username: ");
-            var userName = Console.ReadLine();
+        static bool TryGetUser(){
             try{
-                _userProfile = _gitHubApi.GetUser(userName);
+                Console.Write("Search user: ");
+                var userName = Console.ReadLine();
+                userProfile = gitHubApi.GetUser(userName);
+                Console.Clear();
                 return true;
             }
             catch (Exception e){
                 Console.WriteLine(e.GetBaseException().Message);
+                return false;
             }
-
-            return false;
+            
         }
-
-        static ConsoleKey GetConsoleKey(){
-            var keyInfo = Console.ReadKey();
-            return keyInfo.Key;
-        }
-
-        static bool ExitApplication(){
-            Console.WriteLine("Press enter to try again!");
-            if (GetConsoleKey() != ConsoleKey.Enter){
-                Console.Clear();
-                Console.WriteLine("Shutting down!");
-                return true;
-            }
-
-            Console.Clear();
-            return false;
-        }
-        //TODO: Refactor this to a command class!
-
-        #region Put in a new command class
-
-        static int SelectUserOption(){
-            Console.Clear();
-            _userProfile.DisplayInfo();
-            Console.WriteLine(
-                $"\r\nOptions:\r\n1. Repositories({_userProfile.public_repos}), 2. Search new user, 3: Quit");
-            var userInput = GetInput(1, 3);
-            Console.Clear();
-            return userInput;
-        }
-
-        static int SelectRepository(){
-            Console.Clear();
-            Console.WriteLine($"{_userProfile.Login}'s public repositories:");
-            for (var i = 0; i < _userProfile.Repositories.Count; i++)
-                Console.WriteLine($"({i}) {_userProfile.Repositories[i].Name}");
-            Console.WriteLine("Options:");
-            var userInput = GetInput(0, _userProfile.Repositories.Count - 1);
-            Console.Clear();
-            return userInput;
-        }
-
-        static int GetInput(int startIndex, int maxLenght){
-            var result = -1;
-            while (true){
-                if (int.TryParse(Console.ReadLine(), NumberStyles.Integer, null, out result) &&
-                    result == Math.Clamp(result, startIndex, maxLenght)){
-                    Console.Clear();
-                    return result;
-                }
-
-                Console.WriteLine($"Error: Needs to be a number between {startIndex} and {maxLenght}");
-            }
-        }
-
-        #endregion
     }
 }
