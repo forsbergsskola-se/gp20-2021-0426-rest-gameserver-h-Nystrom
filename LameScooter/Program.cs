@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using LameScooter.ScooterRentalApi;
 
 namespace LameScooter{
-    internal class Program{
+    class Program{
+        //TODO: Implement MongoDB!
         static async Task Main(string[] args){
             var rental = GetDatabaseType(args);
             
@@ -19,14 +20,21 @@ namespace LameScooter{
             Console.ReadKey();
         }
 
-        static ILameScooterRental GetDatabaseType(IReadOnlyList<string> args){//TODO: Use reflection here instead!?
-            if (args.Count == 2 && args[1] == "deprecated"){
-                Console.WriteLine("From deprecated server...");
-                return new LameScooterRental();
-                
+        static ILameScooterRental GetDatabaseType(IReadOnlyList<string> args){
+            if(args.Count != 2)
+                throw new ArgumentException("Needs two arguments: station name and database type");
+            switch (args[1]){
+                case "realTime":
+                    Console.WriteLine("From deprecated server...");
+                    return new LameScooterRental();
+                case "MongoDB":
+                    throw new NotImplementedException("Implement!");
+                case "deprecated":
+                    Console.WriteLine("From offline server...");
+                    return new OfflineLameScooterRental();
+                default:
+                    throw new ArgumentException("Database type can't be found!"); 
             }
-            Console.WriteLine("From offline server...");
-            return new OfflineLameScooterRental();
         }
     }
 }

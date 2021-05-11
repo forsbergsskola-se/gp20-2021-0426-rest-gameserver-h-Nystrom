@@ -3,6 +3,7 @@
 namespace LameScooter.ScooterRentalApi.Data{
     [Serializable]
     public class Station : IStation{
+        //TODO: Remove unused properties!
         public string Id{ get; set; }
         public string Name{ get; set;}
         public float X{ get; set;}
