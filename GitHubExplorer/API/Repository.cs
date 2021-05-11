@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GitHubExplorer.API.Data;
 
 namespace GitHubExplorer.API{
     [Serializable]
-    public class Repository : IRepository{
+    public class Repository : GitHubRequester, IRepository{
+        public Repository() : base(token){ }
+        
         public string Name{ get; set; }
+        public string full_Name{ get; set; }
         public string Description{ get; set; }
         public Owner Owner{ get; set; }
         public string Login => Owner.Login;
@@ -20,8 +24,16 @@ namespace GitHubExplorer.API{
         public IIssue CreateIssue(string title, string description){
             throw new NotImplementedException();
         }
+
         public List<IIssue> GetIssues(){
-            throw new NotImplementedException();//TODO: Implement!
+            try{
+                var issues = Run<List<Issue>>($"repos/{full_Name}/issues");
+                return issues.Cast<IIssue>().ToList();
+            }
+            catch (Exception e){
+                Console.WriteLine(e.GetBaseException().Message);
+                throw;
+            }
         }
         // public void DisplayInfo(){
         //     var info = new []{$"Repository: {Name}",$"Owner: {Owner.Login}",$"Description: {Description}",$"Created at: {created_at}", 

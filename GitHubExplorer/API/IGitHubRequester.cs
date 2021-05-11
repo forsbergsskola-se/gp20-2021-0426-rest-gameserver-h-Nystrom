@@ -7,19 +7,29 @@ using Newtonsoft.Json.Serialization;
 
 namespace GitHubExplorer.API{
     public abstract class GitHubRequester{
-        const string GitHubUrl = "https://api.github.com/users/";
+        const string GitHubUrl = "https://api.github.com/";
         HttpClient httpClient;
         readonly JsonSerializerSettings settings;
-        readonly string token;
+        protected static string token;
         
         protected GitHubRequester(string token){
-            this.token = token;
+            GitHubRequester.token = token;
             settings = new JsonSerializerSettings{
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 Formatting = Formatting.Indented
             };
         }
-        protected async Task<string> SendWebRequest(string uri){
+        protected TObject Run<TObject>(string uri){
+            try{
+                var requestUserTask = SendWebRequest(uri);
+                requestUserTask.Wait();
+                return DeserializeJson<TObject>(requestUserTask.Result);
+            }
+            catch (AggregateException e){
+                throw new AggregateException(e.GetBaseException().Message);
+            }
+        }
+        async Task<string> SendWebRequest(string uri){
             try{
                 httpClient = new HttpClient().HeaderSetup(token, GitHubUrl);
                 var response = await httpClient.GetAsync(uri);
@@ -33,7 +43,7 @@ namespace GitHubExplorer.API{
                 throw new AggregateException($"Request failed: {e.StatusCode}");
             }
         }
-        protected TObject DeserializeJson<TObject>(string rawJson){
+        TObject DeserializeJson<TObject>(string rawJson){
             try{
                 var user = JsonConvert.DeserializeObject<TObject>($"{rawJson}", settings);
                 return user;
@@ -43,6 +53,5 @@ namespace GitHubExplorer.API{
                 throw;
             }
         }
-        
     }
 }

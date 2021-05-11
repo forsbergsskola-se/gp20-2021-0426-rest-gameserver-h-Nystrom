@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using GitHubExplorer.API.Data;
 
 namespace GitHubExplorer.API{
     public interface IRepository {
         string Name {get;}
+        string full_Name{ get; }
         string Description {get;}
         public string Login{ get;}
         string html_url{ get; }

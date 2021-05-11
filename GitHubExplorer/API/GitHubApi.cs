@@ -2,18 +2,18 @@
 
 namespace GitHubExplorer.API{
     public class GitHubApi : GitHubRequester,IGitHubApi{
-
-        public GitHubApi(string token) : base(token){ }
-        
+        public GitHubApi(string token2) : base(token2){ }
         public IUser GetUser(string userName){
             try{
-                var requestUserTask = SendWebRequest(userName);
-                requestUserTask.Wait();
-                return DeserializeJson<UserData>(requestUserTask.Result);
+                return Run<User>($"users/{userName}");
             }
-            catch (AggregateException e){
-                throw new AggregateException(e.GetBaseException().Message);
+            catch (Exception e){
+                Console.WriteLine(e.GetBaseException().Message);
+                throw;
             }
+            
         }
+
+        
     }
 }
