@@ -13,6 +13,15 @@ namespace GitHubExplorer.API{
             }
             
         }
+        public IOrganization GetOrganization(string organisationName){
+            try{
+                return Request<Organization>($"orgs/{organisationName}");
+            }
+            catch (Exception e){
+                Console.WriteLine(e.GetBaseException().Message);
+                throw;
+            }
+        }
 
         
     }

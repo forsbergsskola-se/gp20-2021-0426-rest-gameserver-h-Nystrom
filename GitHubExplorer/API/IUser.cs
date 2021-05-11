@@ -1,4 +1,6 @@
-﻿namespace GitHubExplorer.API{
+﻿using System;
+
+namespace GitHubExplorer.API{
     public interface IUser {
         string Login{ get; }
         string Name {get;}
@@ -8,5 +10,6 @@
         string html_url{ get; }
         int public_repos{ get; }
         IRepository GetRepository(string repositoryName);
+        void ShowInfo();
     }
 }

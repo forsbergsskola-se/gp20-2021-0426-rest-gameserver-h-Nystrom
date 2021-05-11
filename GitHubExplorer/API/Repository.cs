@@ -23,8 +23,7 @@ namespace GitHubExplorer.API{
 
         public IIssue CreateIssue(string title, string description){
             try{
-                var issue = Request<Issue>($"repos/{full_Name}/issues",new PostMessage(title, description));
-                return issue;
+                return Request<Issue>($"repos/{full_Name}/issues",new PostMessage(title, description));
             }
             catch (Exception e){
                 Console.WriteLine(e.GetBaseException().Message);
@@ -42,12 +41,12 @@ namespace GitHubExplorer.API{
                 throw;
             }
         }
-        // public void DisplayInfo(){
-        //     var info = new []{$"Repository: {Name}",$"Owner: {Owner.Login}",$"Description: {Description}",$"Created at: {created_at}", 
-        //         $"Last updated: {updated_at}",$"Watchers: {Watchers}", $"Forks: {forks_count}", $"Open issues: {open_issues}", issue_events_url,html_url};
-        //     foreach (var element in info){
-        //         Console.WriteLine(element);
-        //     }
-        // }
+        public void ShowInfo(){
+            var info = new []{$"Repository: {Name}",$"Owner: {Owner.Login}",$"Description: {Description}",$"Created at: {created_at}", 
+                $"Last updated: {updated_at}",$"Watchers: {Watchers}", $"Forks: {forks_count}", $"Open issues: {open_issues}",html_url};
+            foreach (var element in info){
+                Console.WriteLine(element);
+            }
+        }
     }
 }

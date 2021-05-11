@@ -15,7 +15,7 @@ namespace GitHubExplorer.API{
         string issue_events_url{ get;}
         IIssue CreateIssue(string title, string description);
         List<IIssue> GetIssues();
-        // void DisplayInfo();
+        void ShowInfo();
 
     }
 }

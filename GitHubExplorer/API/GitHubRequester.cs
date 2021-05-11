@@ -27,6 +27,8 @@ namespace GitHubExplorer.API{
             try{
                 var requestTask = SendWebRequest(uri);
                 requestTask.Wait();
+                if(requestTask.Result == "")
+                    throw new ArgumentException("Could not be found...");
                 return DeserializeJson<TObject>(requestTask.Result);
             }
             catch (AggregateException e){
@@ -37,6 +39,8 @@ namespace GitHubExplorer.API{
             try{
                 var requestTask = PostWebRequest(uri, message);
                 requestTask.Wait();
+                if(requestTask.Result == "")
+                    throw new ArgumentException("Could not be found...");
                 return DeserializeJson<TObject>(requestTask.Result);
             }
             catch (AggregateException e){
@@ -83,9 +87,5 @@ namespace GitHubExplorer.API{
                 throw;
             }
         }
-        // protected enum RequestType{
-        //     Send,
-        //     Post,
-        // }
     }
 }

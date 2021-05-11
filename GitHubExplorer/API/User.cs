@@ -24,7 +24,7 @@ namespace GitHubExplorer.API{
                 throw;
             }
         }
-        public void DisplayInfo(){
+        public void ShowInfo(){
             var info = new[]{$"User: {Login}", $"Name: {Name}", 
                 $"Bio: {Bio}",$"Location: {Location}", $"Company:{Company}",
                 organizations_url, $"Public repositories: {public_repos}", html_url};
