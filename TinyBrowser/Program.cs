@@ -94,7 +94,7 @@ namespace TinyBrowser{
         static IWebsiteBrowser TryGetBrowser(){
             while (true){
                 try{
-                    Console.WriteLine("Tiny browser:\nOptions: 1. Live, 2. Offline, 3. XmlReader");
+                    Console.WriteLine("Tiny browser:\nOptions: 1. TcpClient, 2. Local, 3. HttpWebRequest");
                     var input = GetInput(1, BrowserInitializer.Options);
                     Console.Clear();
                     return BrowserInitializer.GetBrowser(input);

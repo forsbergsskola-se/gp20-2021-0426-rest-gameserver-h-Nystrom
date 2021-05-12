@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 
 namespace TinyBrowser.Api{
-    public class WebRequestWebsiteBrowser : WebsiteBrowser{
+    public class HttpWebRequestWebsiteBrowser : WebsiteBrowser{
         protected override string GetWebPageHtml(string host, string uri, int port){
             uri = uri != "" ? new Uri($"http://www.{host}/{uri}").AbsoluteUri : $"http://{host}";
             try{
