@@ -4,8 +4,6 @@ using GitHubExplorer.API;
 
 namespace GitHubExplorer{
     internal class Program{
-        //TODO: Get issues and create/publish issues!
-        //TODO: Refactor!
         static IUser userProfile;
         static IRepository repository;
         static List<IIssue> issues;

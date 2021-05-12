@@ -19,7 +19,6 @@ namespace GitHubExplorer.API{
         public int forks_count{ get; set;}
         public int Watchers{ get; set;}
         public int open_issues{ get; set;}
-        public string issue_events_url{ get; set; }
 
         public IIssue CreateIssue(string title, string description){
             try{
