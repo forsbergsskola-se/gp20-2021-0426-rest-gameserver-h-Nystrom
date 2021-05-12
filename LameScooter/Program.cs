@@ -1,15 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using LameScooter.ScooterRentalApi;
 
 namespace LameScooter{
     class Program{
         //TODO: Implement MongoDB!
+        
         static async Task Main(string[] args){
-            var rental = GetDatabaseType(args);
-            
             try{
+                NoArgsCheck(ref args);
+                DigitCheck(args[0]);
+                var rental = LameScooterInitializer.GetLameScooterRental(args);
                 var station = await rental.GetScooterStation(args[0].Replace("_", " "));
                 Console.WriteLine($"Number of Scooters Available at {station.Name}: {station.BikesAvailable}");
             }
@@ -20,21 +22,31 @@ namespace LameScooter{
             Console.ReadKey();
         }
 
-        static ILameScooterRental GetDatabaseType(IReadOnlyList<string> args){
-            if(args.Count != 2)
-                throw new ArgumentException("Needs two arguments: station name and database type");
-            switch (args[1]){
-                case "realTime":
-                    Console.WriteLine("From deprecated server...");
-                    return new LameScooterRental();
-                case "MongoDB":
-                    throw new NotImplementedException("Implement!");
-                case "deprecated":
-                    Console.WriteLine("From offline server...");
-                    return new OfflineLameScooterRental();
-                default:
-                    throw new ArgumentException("Database type can't be found!"); 
+        static void DigitCheck(string arg){
+            if (Regex.Match(arg, @"[0-9]", RegexOptions.IgnoreCase).Success){
+                throw new ArgumentException("Stations can't contain digits!");
             }
+        }
+
+        static void NoArgsCheck(ref string[] args){
+            
+            if (args.Length != 0) return;
+            var options = new[]{"deprecated","realtime","mongodb"};
+            Console.WriteLine($"No args! Press: 1. {options[1]}, 2. {options[2]}, Other: {options[0]}");
+            switch (Console.ReadKey().Key){
+                case ConsoleKey.D1:
+                    args = new []{"Linnanmäki", options[1]};
+                    return;
+                case ConsoleKey.D2:
+                    args = new []{"Linnanmäki", options[2]};
+                    return;
+                default:
+                    args = new []{"Linnanmäki", options[0]}; 
+                    return;
+            }
+            //TODO: Replace with:
+            //throw new ArgumentException("Server needs a station name!");
+
         }
     }
 }
