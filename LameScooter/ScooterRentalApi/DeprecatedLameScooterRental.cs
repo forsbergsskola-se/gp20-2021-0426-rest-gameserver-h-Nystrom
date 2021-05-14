@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using LameScooter.ScooterRentalApi.Data;
 using Newtonsoft.Json;
@@ -20,12 +21,11 @@ namespace LameScooter.ScooterRentalApi{
         public Task<IStation> GetScooterStation(string stationName){
             try{
                 var rawJson = File.ReadAllText(databasePath);
-                var stations = JsonConvert.DeserializeObject<Station[]>(rawJson, serializerSettings);
-                foreach (var station in stations){
-                    if (station.Name == stationName)
-                        return Task.FromResult((IStation)station);
+                var stations = JsonConvert.DeserializeObject<Stations>(rawJson, serializerSettings);
+                foreach (var station in stations.stations.Where(station => station.Name == stationName)){
+                    return Task.FromResult((IStation)station);
                 }
-                throw new NotFoundException($"404: Station {stationName} not found!");
+                throw new NotFoundException($"Station {stationName} was not found!");
             }
             catch (Exception e){
                 throw new Exception(e.GetBaseException().Message);

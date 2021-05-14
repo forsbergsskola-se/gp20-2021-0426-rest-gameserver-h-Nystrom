@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -34,9 +33,6 @@ namespace LameScooter.ScooterRentalApi{
                 Console.WriteLine(e);
                 throw new Exception(e.GetBaseException().Message);
             }
-        }
-        class Stations{
-            public List<Station> stations{ get; set;}
         }
     }
 }
