@@ -10,6 +10,7 @@ namespace MMORPG.ServerApi{
     public class MongoCrude : IRepository{
         MongoClient mongoClient;
         IMongoDatabase mongoDatabase;
+        const int timeout = 1000;
         public MongoCrude(string host){
             var mongoClientSettings = MongoClientSettings.FromUrl(new MongoUrl(host));
             mongoClient = new MongoClient(mongoClientSettings);
@@ -23,10 +24,14 @@ namespace MMORPG.ServerApi{
             throw new NotImplementedException();
         }
         public async Task<Player> Create(Player player){
+            //TODO: Create a timeOut after x seconds if the server doesn't respond!
             try{
                 var mongoCollection = mongoDatabase.GetCollection<Player>("users");
-                await mongoCollection.InsertOneAsync(player);
-                return player;
+                var task = mongoCollection.InsertOneAsync(player);
+                if (await Task.WhenAny(task, Task.Delay(timeout)) == task){
+                    return player;
+                }
+                throw new Exception("Connection timeout!");//TODO:Fix!
             }
             catch (Exception e){
                 Console.WriteLine(e);
