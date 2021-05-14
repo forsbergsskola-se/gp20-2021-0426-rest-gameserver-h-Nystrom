@@ -44,7 +44,7 @@ namespace MMORPG
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MMORPG v1"));
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();//TODO: Remove?
 
             app.UseRouting();
 
