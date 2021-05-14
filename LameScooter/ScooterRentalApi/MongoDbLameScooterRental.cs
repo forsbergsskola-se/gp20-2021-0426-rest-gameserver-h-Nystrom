@@ -30,9 +30,4 @@ namespace LameScooter.ScooterRentalApi{
             }
         }
     }
-    // How to find all database names from a host:
-    // var temp = mongoClient.ListDatabaseNames().ToList();
-    // foreach (var dbName in temp){
-    // Console.WriteLine(dbName);
-    // }
 }
