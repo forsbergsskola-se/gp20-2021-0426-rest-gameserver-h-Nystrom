@@ -1,19 +1,17 @@
 using System;
 using MMORPG.ServerApi;
 using MMORPG.ServerApi.Models;
-using MMORPG.ServerApi.ServerExceptions;
-using MongoDB.Bson;
 using NUnit.Framework;
 
 namespace GameServerTests.MmoRpgTests{
-    public class RepositoryTests{
+    public class RepositoryLiveDataBaseTests{
         IRepository mongoRepository;
         [SetUp]
         public void Setup(){
             mongoRepository = new MongoRepository("mongodb://localhost:27017", "game", "players");
         }
         [Test]
-        public void AddNewPlayerToDataBaseHandlesCallTimeouts(){
+        public void AddNewPlayerToDataBase(){
             var player = new Player{
                 Name = "UserName",
                 Level = 1,
@@ -45,7 +43,7 @@ namespace GameServerTests.MmoRpgTests{
             }
         }
         [Test]
-        public void GetAllPlayersFromDataBase(){
+        public void GetAllPlayersInDataBase(){
             try{
                 var player = mongoRepository.GetAll();
                 Console.WriteLine($"Result name: {player.Result[0].Name}");
@@ -55,6 +53,16 @@ namespace GameServerTests.MmoRpgTests{
                 Console.WriteLine(e.GetBaseException().Message);
                 Assert.Fail(e.GetBaseException().Message);
             }
+        }
+
+        [Test]
+        public void ModifyPlayerInDataBase(){
+            throw new NotImplementedException("Implement!");
+        }
+
+        [Test]
+        public void RemovePlayerFromDataBase(){
+            throw new NotImplementedException("Implement!");
         }
     }
 }

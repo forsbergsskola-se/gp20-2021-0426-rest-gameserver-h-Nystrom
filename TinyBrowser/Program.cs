@@ -6,7 +6,7 @@ using TinyBrowser.Api;
 
 namespace TinyBrowser{
     internal class Program{
-        //TODO: If I have time: refactor and code clean up.
+        //TODO: If I have time: refactor and code cleanup.
 
         const string Host = "acme.com";
         const int Port = 80;
