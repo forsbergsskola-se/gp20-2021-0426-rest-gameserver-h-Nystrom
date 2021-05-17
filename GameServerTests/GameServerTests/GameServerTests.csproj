@@ -15,10 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\GitHubExplorer\GitHubExplorer.csproj" />
-      <ProjectReference Include="..\..\LameScooter\LameScooter.csproj" />
       <ProjectReference Include="..\..\MMORPG\MMORPG.csproj" />
-      <ProjectReference Include="..\..\TinyBrowser\TinyBrowser.csproj" />
     </ItemGroup>
 
 </Project>
