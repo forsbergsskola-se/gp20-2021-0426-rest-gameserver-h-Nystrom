@@ -1,7 +1,9 @@
 ﻿using System;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace MMORPG.ServerApi.Models{
     public class Player{
+        [BsonId]
         public Guid Id { get; set; }//TODO: Set by server!
         public string Name { get; set; }
         public int Score { get; set; }

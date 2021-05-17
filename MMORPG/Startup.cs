@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MMORPG.ServerApi;
+using MMORPG.ServerApi.Models;
 
 namespace MMORPG
 {
@@ -28,6 +30,7 @@ namespace MMORPG
         {
 
             services.AddControllers();
+            services.AddSingleton<IRepository, MongoRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MMORPG", Version = "v1" });

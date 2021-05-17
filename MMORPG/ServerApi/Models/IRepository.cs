@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 
 namespace MMORPG.ServerApi.Models{
     public interface IRepository
