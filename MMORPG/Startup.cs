@@ -11,8 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MMORPG.Models;
 using MMORPG.ServerApi;
-using MMORPG.ServerApi.Models;
 
 namespace MMORPG
 {
@@ -46,11 +46,8 @@ namespace MMORPG
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MMORPG v1"));
             }
-
             // app.UseHttpsRedirection();//TODO: Remove?
-
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

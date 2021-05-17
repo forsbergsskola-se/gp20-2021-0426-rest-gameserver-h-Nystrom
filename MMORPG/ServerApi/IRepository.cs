@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MongoDB.Bson;
+using MMORPG.Models;
 
-namespace MMORPG.ServerApi.Models{
+namespace MMORPG.ServerApi{
     public interface IRepository
     {
         Task<Player> Get(Guid id);

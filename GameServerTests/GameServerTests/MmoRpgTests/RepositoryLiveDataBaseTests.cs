@@ -1,6 +1,6 @@
 using System;
+using MMORPG.Models;
 using MMORPG.ServerApi;
-using MMORPG.ServerApi.Models;
 using MMORPG.ServerApi.ServerExceptions;
 using NUnit.Framework;
 
@@ -11,7 +11,7 @@ namespace GameServerTests.MmoRpgTests{
         IRepository mongoRepository;
         [SetUp]
         public void Setup(){
-            mongoRepository = new MongoRepository("mongodb://localhost:27017", "game", "players");
+            mongoRepository = new MongoRepository();
         }
         [Test]
         public void AddNewPlayerToDataBase(){//TODO:Step one
