@@ -8,10 +8,10 @@ namespace GameServerTests.MmoRpgTests{
     public class RepositoryLiveDataBaseTests{
         //TODO: Refactor duplication!
         
-        IRepository mongoRepository;
+        IRepository<Player> mongoRepository;
         [SetUp]
         public void Setup(){
-            mongoRepository = new MongoRepository();
+            mongoRepository = new MongoRepository<Player>();
         }
         [Test]
         public void AddNewPlayerToDataBase(){//TODO:Step one

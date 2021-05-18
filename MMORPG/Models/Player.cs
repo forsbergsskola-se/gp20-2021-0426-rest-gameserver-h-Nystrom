@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using MMORPG.ServerApi;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace MMORPG.Models{
     [Serializable]
-    public class Player{
+    public class Player : IObject{
         [BsonId] public Guid Id { get; set; }//TODO: Set by server!
         public string Name { get; set; }
         [BsonElement("Score")] public int Score{ get; set; }

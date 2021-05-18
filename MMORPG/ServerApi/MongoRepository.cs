@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MMORPG.Models;
 using MMORPG.ServerApi.ServerExceptions;
@@ -6,61 +7,59 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace MMORPG.ServerApi{
-    public class MongoRepository : IRepository{
+    public class MongoRepository<TObject>  : IRepository<TObject> where TObject : IObject{
         //TODO: Refactor duplication!
         //TODO: Set data when instantiating(collectionName, Host, DbName).
 
         readonly IMongoDatabase mongoDatabase;
         const int Timeout = 1000;
-        const string CollectionName = "players";
+        readonly string collectionName;
 
         public MongoRepository(){
             var mongoClientSettings = MongoClientSettings.FromUrl(new MongoUrl("mongodb://localhost:27017"));
             var mongoClient = new MongoClient(mongoClientSettings);
             mongoDatabase = mongoClient.GetDatabase("game");
+            collectionName = $"{typeof(TObject).Name.ToLower()}s";
         }
-        public async Task<Player> Get(Guid id){
+        public async Task<TObject> Get(Guid id){
             try{
-                var mongoCollection = mongoDatabase.GetCollection<Player>(CollectionName);
-                var getPlayerTask = mongoCollection.FindAsync(player1 => player1.Id == id);
+                var mongoCollection = mongoDatabase.GetCollection<TObject>(collectionName);
+                var targetObjectTask = mongoCollection.FindAsync(targetObject => targetObject.Id == id);
 
-                if (await Task.WhenAny(getPlayerTask, Task.Delay(Timeout)) != getPlayerTask)
+                if (await Task.WhenAny(targetObjectTask, Task.Delay(Timeout)) != targetObjectTask)
                     throw new RequestTimeoutException("408: Request timeout!");
                 
-                if (getPlayerTask.Result == null)
+                if (targetObjectTask.Result == null)
                     throw new NotFoundException("404: Player not found!");
-                return getPlayerTask.Result.First();
+                return targetObjectTask.Result.First();
             }
             catch (Exception e){
                 Console.WriteLine(e);
                 throw new NotFoundException("404: Player not found!");
             }
         }
-
-        public async Task<Player[]> GetAll(){
+        public async Task<TObject[]> GetAll(){
             try{
-                var mongoCollection = mongoDatabase.GetCollection<Player>(CollectionName);
-                var getPlayerTask = mongoCollection.Find(new BsonDocument()).ToListAsync();
-
-                if (await Task.WhenAny(getPlayerTask, Task.Delay(Timeout)) != getPlayerTask)
+                var mongoCollection = mongoDatabase.GetCollection<TObject>(collectionName);
+                var targetObjectTask = mongoCollection.Find(new BsonDocument()).ToListAsync();
+                if (await Task.WhenAny(targetObjectTask, Task.Delay(Timeout)) != targetObjectTask)
                     throw new RequestTimeoutException("408: Request timeout!");
-                
-                if (getPlayerTask.Result == null)
+
+                if (targetObjectTask.Result == null)
                     throw new NotFoundException("404: Player not found!");
-                return getPlayerTask.Result.ToArray();
+                return targetObjectTask.Result.ToArray();
             }
             catch (Exception e){
-                Console.WriteLine(e);
-                throw;
+                throw e.GetBaseException();
             }
         }
 
-        public async Task<Player> Create(Player player){
+        public async Task<TObject> Create(TObject targetObject){
             try{
-                var mongoCollection = mongoDatabase.GetCollection<Player>(CollectionName);
-                var task = mongoCollection.InsertOneAsync(player);
-                if (await Task.WhenAny(task, Task.Delay(Timeout)) == task){
-                    return player;
+                var mongoCollection = mongoDatabase.GetCollection<TObject>(collectionName);
+                var targetObjectTask = mongoCollection.InsertOneAsync(targetObject);
+                if (await Task.WhenAny(targetObjectTask, Task.Delay(Timeout)) == targetObjectTask){
+                    return targetObject;
                 }
                 throw new RequestTimeoutException("408: Request timeout!");
             }
@@ -69,34 +68,34 @@ namespace MMORPG.ServerApi{
                 throw;
             }
         }
-        public async Task<Player> Modify(Guid id, ModifiedPlayer player){
+        public async Task<TObject> Modify<TObject2>(Guid id, TObject2 targetObject) where TObject2 : IObject{
             try{
-                var mongoCollection = mongoDatabase.GetCollection<Player>(CollectionName);
-                var updatePlayer = Builders<Player>.Update.Inc("Score", player.Score);
-                var getPlayerTask = mongoCollection.FindOneAndUpdateAsync(playerTarget => playerTarget.Id == id, updatePlayer);
+                var mongoCollection = mongoDatabase.GetCollection<TObject>(collectionName);
+                var updateTargetObject = Builders<TObject>.Update.Inc("Score", targetObject.Score);
+                var targetObjectTask = mongoCollection.FindOneAndUpdateAsync(playerTarget => playerTarget.Id == id, updateTargetObject);
                 
-                if (await Task.WhenAny(getPlayerTask, Task.Delay(Timeout)) != getPlayerTask)
+                if (await Task.WhenAny(targetObjectTask, Task.Delay(Timeout)) != targetObjectTask)
                     throw new RequestTimeoutException("408: Request timeout!");
-                if(getPlayerTask.Result == null)
-                    throw new NotFoundException("404: Player not found!");
-                getPlayerTask.Result.Score += player.Score;
-                return getPlayerTask.Result;
+                if(targetObjectTask.Result == null)
+                    throw new NotFoundException($"404: {typeof(TObject).Name} was not found!");
+                targetObjectTask.Result.Score += targetObject.Score;
+                return targetObjectTask.Result;
             }
             catch (Exception e){
                 Console.WriteLine(e.Message);
                 throw;
             }
         }
-        public async Task<Player> Delete(Guid id){
+        public async Task<TObject> Delete(Guid id){
             try{
-                var mongoCollection = mongoDatabase.GetCollection<Player>(CollectionName);
-                var getPlayerTask = mongoCollection.FindOneAndDeleteAsync(player => player.Id == id);
+                var mongoCollection = mongoDatabase.GetCollection<TObject>(collectionName);
+                var targetObjectTask = mongoCollection.FindOneAndDeleteAsync(player => player.Id == id);
                 
-                if (await Task.WhenAny(getPlayerTask, Task.Delay(Timeout)) != getPlayerTask)
+                if (await Task.WhenAny(targetObjectTask, Task.Delay(Timeout)) != targetObjectTask)
                     throw new RequestTimeoutException("408: Request timeout!");
-                if(getPlayerTask.Result == null)
-                    throw new NotFoundException("404: No player was found!");
-                return getPlayerTask.Result;
+                if(targetObjectTask.Result == null)
+                    throw new NotFoundException($"404: {typeof(TObject).Name} was not found!");
+                return targetObjectTask.Result;
             }
             catch (Exception e){
                 Console.WriteLine(e.Message);

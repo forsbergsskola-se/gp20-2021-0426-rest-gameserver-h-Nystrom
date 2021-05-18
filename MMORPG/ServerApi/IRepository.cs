@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MMORPG.Models;
 
 namespace MMORPG.ServerApi{
-    public interface IRepository
+    public interface IRepository<TObject> where TObject: IObject
     {
-        Task<Player> Get(Guid id);
-        Task<Player[]> GetAll();
-        Task<Player> Create(Player player);
-        Task<Player> Modify(Guid id, ModifiedPlayer player);
-        Task<Player> Delete(Guid id);
+        Task<TObject> Get(Guid id);
+        Task<TObject[]> GetAll();
+        Task<TObject> Create(TObject targetObject);
+        Task<TObject> Modify<TObject2>(Guid id, TObject2 targetObject)where TObject2 : IObject;
+        Task<TObject> Delete(Guid id);
     }
 }

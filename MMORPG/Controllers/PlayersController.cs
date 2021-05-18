@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MMORPG.Models;
 using MMORPG.ServerApi;
 using Newtonsoft.Json;
 
@@ -8,8 +9,8 @@ namespace MMORPG.Controllers{
     [ApiController]
     [Route("api/mmorpg/[controller]")]
     public class PlayersController : ControllerBase{
-        readonly IRepository repository;
-        public PlayersController(IRepository repository){
+        readonly IRepository<Player> repository;
+        public PlayersController(IRepository<Player> repository){
             this.repository = repository;
         }
         [HttpGet]

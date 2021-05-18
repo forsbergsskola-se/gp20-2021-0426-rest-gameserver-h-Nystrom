@@ -30,7 +30,7 @@ namespace MMORPG
         {
 
             services.AddControllers();
-            services.AddSingleton<IRepository, MongoRepository>();
+            services.AddSingleton<IRepository<Player>, MongoRepository<Player>>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MMORPG", Version = "v1" });
