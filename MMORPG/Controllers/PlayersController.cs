@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MMORPG.Models;
@@ -17,11 +18,18 @@ namespace MMORPG.Controllers{
         public async Task<IActionResult> GetLeaderboard(){
             try{
                 var players = await repository.GetAll();
+                RemoveId(players);
                 var jsonPlayers = JsonConvert.SerializeObject(players);
                 return Ok(jsonPlayers);
             }
             catch (Exception e){
                 return e.GetBaseException().GetHttpCodeStatus();
+            }
+        }
+
+        static void RemoveId(IEnumerable<Player> players){
+            foreach (var player in players){
+                player.Id = Guid.Empty;
             }
         }
 

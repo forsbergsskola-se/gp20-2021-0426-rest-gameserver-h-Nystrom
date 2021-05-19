@@ -11,14 +11,12 @@ namespace ClientApi{
 
         public Client(string baseUrl){
             this.baseUrl = baseUrl;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-            ServicePointManager.ServerCertificateValidationCallback +=
-                (sender, cert, chain, sslPolicyErrors) => true;
         }
         public async Task<string> GetTargetObjects(string uri){
             var httpClient = new HttpClient().HeaderSetup($"{baseUrl}");
             try{
                 var response = await httpClient.GetAsync(uri);
+                Debug.Log(response);
                 response.EnsureSuccessStatusCode();
                 var responseBody = await response.Content.ReadAsStringAsync();
                 httpClient.Dispose();
