@@ -3,7 +3,7 @@ using MMORPG.ServerApi;
 
 namespace MMORPG.Models{
     [Serializable]
-    public class Item : IObject{
+    public class Item : IRequestObject{
         public Guid Id{ get; set; }
         public string Name{ get; set; }
         public int Level{ get; set; }

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using MMORPG.ServerApi;
-using MongoDB.Bson.Serialization.Attributes;
 
-namespace MMORPG.Models{
+namespace ClientApi.Models{
     [Serializable]
-    public class Player : IRequestObject{
-        [BsonId] public Guid Id { get; set; }//TODO: Set by server!
+    public class Player{
+        public Guid Id { get; set; }//TODO: Set by server!
         public string Name { get; set; }
-        [BsonElement("Score")] public int Score{ get; set; }
+        public int Score{ get; set; }
         public int Level{ get; set; }
         public List<Item> Items{ get; set; } = new List<Item>();
         public bool IsDeleted { get; set; }
