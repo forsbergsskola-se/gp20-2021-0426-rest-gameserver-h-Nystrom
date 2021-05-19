@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace MMORPG.ServerApi{
-    public interface IObject{
+    public interface IRequestObject{
         Guid Id{ get; set; }
         int Score{ get; set; }
     }

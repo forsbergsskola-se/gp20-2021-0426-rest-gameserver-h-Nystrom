@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using MMORPG.Models;
 using MMORPG.ServerApi.ServerExceptions;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace MMORPG.ServerApi{
-    public class MongoRepository<TObject>  : IRepository<TObject> where TObject : IObject{
+    public class MongoRepository<TObject>  : IRepository<TObject> where TObject : IRequestObject{
         //TODO: Refactor duplication!
         //TODO: Set data when instantiating(collectionName, Host, DbName).
 
@@ -68,7 +66,7 @@ namespace MMORPG.ServerApi{
                 throw;
             }
         }
-        public async Task<TObject> Modify<TObject2>(Guid id, TObject2 targetObject) where TObject2 : IObject{
+        public async Task<TObject> Modify<TObject2>(Guid id, TObject2 targetObject) where TObject2 : IRequestObject{
             try{
                 var mongoCollection = mongoDatabase.GetCollection<TObject>(collectionName);
                 var updateTargetObject = Builders<TObject>.Update.Inc("Score", targetObject.Score);
