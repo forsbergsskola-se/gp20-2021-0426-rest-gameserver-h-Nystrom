@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ClientApi.Models{
     [Serializable]
-    public class Player : IPlayer{
+    public class Player{
         public Guid Id { get; set; }//TODO: Set by server!
         public string Name { get; set; }
         public int Score{ get; set; }

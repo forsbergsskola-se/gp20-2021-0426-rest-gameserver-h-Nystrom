@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ClientApi.Utility;
@@ -27,8 +26,20 @@ namespace ClientApi{
                 throw;
             }
         }
-        public Task<string> GetTargetObject(Guid id){
-            throw new NotImplementedException();
+        public async Task<string> GetTargetObject(string uri, Guid id){
+            var httpClient = new HttpClient().HeaderSetup($"{baseUrl}");
+            try{
+                var response = await httpClient.PostAsync(uri, new StringContent(id.ToString()));
+                Debug.Log(response);
+                response.EnsureSuccessStatusCode();
+                var responseBody = await response.Content.ReadAsStringAsync();
+                httpClient.Dispose();
+                return responseBody;
+            }
+            catch (Exception e){
+                Debug.Log(e.GetBaseException().Message);
+                throw;
+            }
         }
 
         public Task<string> CreateTargetObject<TObject>(string uri, TObject targetObject){

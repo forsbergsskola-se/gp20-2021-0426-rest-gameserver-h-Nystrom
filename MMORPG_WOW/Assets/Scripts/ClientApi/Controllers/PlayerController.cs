@@ -17,9 +17,9 @@ namespace ClientApi.Controllers{
             try{
                 var jsonResponse = await client.GetTargetObjects(uri);
                 Debug.Log(jsonResponse);
-                // leaderboard = JsonConvert.DeserializeObject<Player[]>(jsonResponse);
-                // Debug.Log($"Success: {leaderboard.Length}");
-                // Debug.Log($"Name of player one: " + leaderboard[0].Name);
+                leaderboard = JsonConvert.DeserializeObject<Player[]>(jsonResponse);
+                Debug.Log($"Success: {leaderboard.Length}");
+                Debug.Log($"Name of player one: " + leaderboard[0].Name);
             }
             catch (Exception e){
                 Debug.Log(e);
