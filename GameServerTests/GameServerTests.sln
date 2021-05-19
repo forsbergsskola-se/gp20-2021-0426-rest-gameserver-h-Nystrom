@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServerTests", "GameServerTests\GameServerTests.csproj", "{251850A1-E19F-4C80-875E-F5A6B0C67F53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMORPG", "..\MMORPG\MMORPG.csproj", "{81A3E04B-18AD-4A58-96C1-139CC1CB9E92}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{251850A1-E19F-4C80-875E-F5A6B0C67F53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{251850A1-E19F-4C80-875E-F5A6B0C67F53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{251850A1-E19F-4C80-875E-F5A6B0C67F53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{251850A1-E19F-4C80-875E-F5A6B0C67F53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81A3E04B-18AD-4A58-96C1-139CC1CB9E92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81A3E04B-18AD-4A58-96C1-139CC1CB9E92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81A3E04B-18AD-4A58-96C1-139CC1CB9E92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81A3E04B-18AD-4A58-96C1-139CC1CB9E92}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
