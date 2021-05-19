@@ -11,7 +11,6 @@ namespace ClientApi.Utility{
             httpClient.BaseAddress = new Uri(uri);
             httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("MMORPG", "v1"));
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.api+json"));
-            
             return httpClient;
         }
     }

@@ -15,7 +15,7 @@ namespace ClientApi.Controllers{
         public async void GetLeaderBoard(){
             const string uri = "players/leaderboard/";
             try{
-                var jsonResponse = await client.GetTargetObjects(uri);
+                var jsonResponse = await client.GetRequest(uri);
                 Debug.Log(jsonResponse);
                 leaderboard = JsonConvert.DeserializeObject<Player[]>(jsonResponse);
                 Debug.Log($"Success: {leaderboard.Length}");
@@ -25,7 +25,6 @@ namespace ClientApi.Controllers{
                 Debug.Log(e);
                 throw;
             }
-            
         }
     }
 }
