@@ -6,7 +6,11 @@ namespace ClientApi.UI{
         [SerializeField] GameObject loginPlayerUi;
         [SerializeField] GameObject createPlayerUi;
         [SerializeField] Text nameField;
-        void Awake(){
+        void OnEnable(){
+            SetUp();
+        }
+
+        public void SetUp(){
             var userName = PlayerPrefs.GetString("UserName", "");
             var userId = PlayerPrefs.GetString("UserId", "");
             nameField.text = userName;
