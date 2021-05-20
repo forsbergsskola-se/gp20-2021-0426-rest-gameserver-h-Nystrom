@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Mime;
+using System.Text;
 using System.Threading.Tasks;
+using ClientApi.Models;
 using ClientApi.Utility;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 
 namespace ClientApi{
     public class Client : IClient{
         const string MediaTypeString = "application/json";
         readonly string baseUrl;
-        
 
         public Client(string baseUrl){
             this.baseUrl = baseUrl;
         }
-        public async Task<string> GetRequest(string uri){
+        public async Task<string> GetWebRequest(string uri){
             var httpClient = new HttpClient().HeaderSetup($"{baseUrl}");
             try{
                 var response = await httpClient.GetAsync(uri);
@@ -28,14 +32,37 @@ namespace ClientApi{
                 throw;
             }
         }
-        public Task<string> CreateTargetObject<TObject>(string uri, TObject targetObject){
-            throw new NotImplementedException("Implement!");
+        public async Task<string> PostWebRequest<TObject>(string uri, TObject targetObject){
+            var httpClient = new HttpClient().HeaderSetup($"{baseUrl}");
+            try{
+                var jsonRequest = JsonConvert.SerializeObject(targetObject);
+                var requestContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+                var response = await httpClient.PostAsync(uri, requestContent);
+                response.EnsureSuccessStatusCode();
+                var responseBody = await response.Content.ReadAsStringAsync();
+                httpClient.Dispose();
+                Debug.Log(response);
+                return responseBody;
+            }
+            catch (Exception e){
+                Debug.Log(e.GetBaseException().Message);
+                throw;
+            }
         }
-        public Task<string> ModifyTargetObject<TObject>(string uri, TObject targetObject){
-            throw new NotImplementedException();
-        }
-        public Task<string> DeleteTargetObject<TObject>(string uri, TObject targetObject){
-            throw new NotImplementedException();
+        public async Task<string> DeleteTargetObject(string uri){
+            var httpClient = new HttpClient().HeaderSetup($"{baseUrl}");
+            try{
+                var response = await httpClient.DeleteAsync(uri);
+                response.EnsureSuccessStatusCode();
+                var responseBody = await response.Content.ReadAsStringAsync();
+                httpClient.Dispose();
+                Debug.Log(response);
+                return responseBody;
+            }
+            catch (Exception e){
+                Debug.Log(e.GetBaseException().Message);
+                throw;
+            }
         }
     }
 }

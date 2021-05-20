@@ -5,14 +5,14 @@ using MMORPG.ServerApi.ServerExceptions;
 namespace MMORPG.ServerApi{
     public static class ErrorHandlingMiddleware{
         public static IActionResult GetHttpCodeStatus(this Exception exception){
-            return exception switch{
-                NotFoundException => new StatusCodeResult((int) ErrorCode.NotFound),
-                RequestTimeoutException => new StatusCodeResult((int) ErrorCode.ServerTimeOut),
-                _ => new StatusCodeResult((int) ErrorCode.BadRequest)
+            var statusCode = exception switch{
+                NotFoundException => (int) ErrorCode.NotFound,
+                RequestTimeoutException => (int)ErrorCode.ServerTimeOut,
+                _ => (int)ErrorCode.BadRequest
             };
+            return new ContentResult{Content = exception.Message, StatusCode = statusCode};
         }
-        
-        
+
         enum ErrorCode{
             BadRequest = 400,
             Unauthorized = 401,
