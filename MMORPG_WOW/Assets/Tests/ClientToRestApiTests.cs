@@ -22,7 +22,7 @@ namespace Tests{
         
         [SetUp]
         public void SetUp(){
-            client = new Client(BaseUrl);
+            client = Client.NewClient(BaseUrl);
         }
         [UnityTest, Order(1)]
         public IEnumerator GetPlayerInJson()

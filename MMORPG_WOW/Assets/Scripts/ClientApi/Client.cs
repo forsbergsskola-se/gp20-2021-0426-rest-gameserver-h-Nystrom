@@ -13,9 +13,11 @@ namespace ClientApi{
     public class Client : IClient{
         const string MediaTypeString = "application/json";
         readonly string baseUrl;
-
-        public Client(string baseUrl){
+        Client(string baseUrl){
             this.baseUrl = baseUrl;
+        }
+        public static IClient NewClient(string baseUrl){
+            return new Client(baseUrl);
         }
         public async Task<string> GetWebRequest(string uri){
             var httpClient = new HttpClient().HeaderSetup($"{baseUrl}");
