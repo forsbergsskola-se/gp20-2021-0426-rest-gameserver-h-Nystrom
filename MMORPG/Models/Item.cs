@@ -9,6 +9,7 @@ namespace MMORPG.Models{
         public int Level{ get; set; }
         public string ItemType{ get; set; }//TODO: Fix to enum or something...
         public DateTime CreationDate{ get; set; }
-        public int Score{ get; set; }
+        public int Gold{ get; set; }
+        public int Xp{ get; set; }
     }
 }

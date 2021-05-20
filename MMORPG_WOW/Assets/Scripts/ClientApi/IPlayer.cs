@@ -6,10 +6,10 @@ namespace ClientApi{
     public interface IPlayer{
         Guid Id { get;}//TODO: Set by server!
         string Name { get;}
-        public int Score{ get; set; }
-        public int Level{ get; set; }
-        public List<Item> Items{ get; set; }
-        public bool IsDeleted { get; set; }
-        public DateTime CreationTime { get; set; }
+        int Gold{ get; set; }
+        int Xp{ get; set; }
+        List<Item> Items{ get; set; }
+        bool IsDeleted { get; set; }
+        DateTime CreationTime { get; set; }
     }
 }

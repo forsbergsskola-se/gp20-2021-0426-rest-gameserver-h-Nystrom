@@ -18,20 +18,22 @@ namespace Tests{
         const string BaseUrl = "http://localhost:5001/api/mmorpg/";
         IClient client;
         Player player;
+        string testPlayerName = "ServerTestPlayer";
+        Guid testPlayerId;
         Guid createAndRemoveId;
         
         [SetUp]
         public void SetUp(){
             client = Client.NewClient(BaseUrl);
+            testPlayerId = Guid.Parse("6c20f3f5-4810-482f-aa7c-95401e40ab8b");
         }
         [UnityTest, Order(1)]
         public IEnumerator GetPlayerInJson()
         {
             const string uri = "players/myplayer/";
-            var id = Guid.Parse("92dc2e76-da45-47e2-8084-48f24935f78c");
             Task<string> webRequestTask;
             try{
-                webRequestTask = client.GetWebRequest(uri+id);
+                webRequestTask = client.GetWebRequest(uri+testPlayerId);
             }
             catch (Exception e){
                 Debug.Log(e);
@@ -45,8 +47,8 @@ namespace Tests{
                 Console.WriteLine(e);
                 throw;
             }
-            Assert.AreEqual(id,player.Id);
-            Assert.AreEqual("UserName", player.Name);
+            Assert.AreEqual(testPlayerId,player.Id);
+            Assert.AreEqual(testPlayerName, player.Name);
             Debug.Log(webRequestTask.Result);
         }
         [UnityTest, Order(2)]
@@ -54,8 +56,9 @@ namespace Tests{
         {
             const string uri = "players/modify/";
             Task<string> webRequestTask;
-            var modifiedPlayer = new ModifiedPlayer{Id = player.Id, Score = 1};
-            var oldScore = player.Score;
+            var modifiedPlayer = new ModifiedPlayer{Id = player.Id, Xp = 1, Gold = 10};
+            var addedXp = player.Xp;
+            var addedGold = player.Gold;
             try{
                 webRequestTask = client.PostWebRequest(uri+player.Id,modifiedPlayer);
             }
@@ -71,8 +74,8 @@ namespace Tests{
                 Console.WriteLine(e);
                 throw;
             }
-            Assert.AreEqual(oldScore+modifiedPlayer.Score,player.Score);
-            Assert.AreEqual("UserName", player.Name);
+            Assert.AreEqual(addedXp+modifiedPlayer.Xp,player.Xp);
+            Assert.AreEqual(testPlayerName, player.Name);
             Assert.AreEqual(modifiedPlayer.Id, player.Id);
             Debug.Log(webRequestTask.Result);
         }
@@ -100,11 +103,11 @@ namespace Tests{
             const string uri = "players/create/";
             Task<string> webRequestTask;
             var randomPlayerTestNameId = Random.Range(0, 1000);
-            var newPlayer = new Player{Name = $"UnityClientTest({randomPlayerTestNameId})"};
-            var oldPlayer = newPlayer;
+            var createdPlayer = new NewPlayer{Name = $"UnityClientTest({randomPlayerTestNameId})"};
+            IPlayer player;
             try{
                 
-                webRequestTask = client.PostWebRequest(uri,newPlayer);
+                webRequestTask = client.PostWebRequest(uri,createdPlayer);
             }
             catch (Exception e){
                 Debug.Log(e);
@@ -112,16 +115,16 @@ namespace Tests{
             }
             yield return new WaitUntil(() => webRequestTask.IsCompleted || webRequestTask.IsFaulted);
             try{
-                newPlayer = JsonConvert.DeserializeObject<Player>(webRequestTask.Result);
+                player = JsonConvert.DeserializeObject<Player>(webRequestTask.Result);
             }
             catch (Exception e){
                 Console.WriteLine(e);
                 throw;
             }
-            Assert.AreEqual(oldPlayer.Name,newPlayer.Name);
-            Assert.AreEqual(true, newPlayer.Id != Guid.Empty);
+            Assert.AreEqual(createdPlayer.Name,player.Name);
+            Assert.AreEqual(true, player.Id != Guid.Empty);
             Debug.Log(webRequestTask.Result);
-            createAndRemoveId = newPlayer.Id;
+            createAndRemoveId = player.Id;
         }
 
         [UnityTest, Order(4)]

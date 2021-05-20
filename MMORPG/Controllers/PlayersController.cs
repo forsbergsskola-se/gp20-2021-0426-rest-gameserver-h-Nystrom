@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MMORPG.Models;
 using MMORPG.ServerApi;
+using MMORPG.Utility;
 using Newtonsoft.Json;
 
 namespace MMORPG.Controllers{
@@ -51,8 +53,12 @@ namespace MMORPG.Controllers{
         [HttpPost("modify/{id}")]
         public async Task<IActionResult> ModifyPlayer(Guid id, [FromBody]ModifiedPlayer modifiedPlayer){
             try{
-                var playerTask = await repository.Modify(id, modifiedPlayer);
-                var jsonPlayer = JsonConvert.SerializeObject(playerTask);
+                Player player;
+                player = await repository.Modify(id, nameof(modifiedPlayer.Xp), modifiedPlayer.Xp);
+                player.Xp += modifiedPlayer.Xp;
+                player = await repository.Modify(id, nameof(modifiedPlayer.Gold), modifiedPlayer.Gold);
+                player.Gold += modifiedPlayer.Gold;
+                var jsonPlayer = JsonConvert.SerializeObject(player);
                 return new OkObjectResult(jsonPlayer);
             }
             catch (Exception e){
@@ -78,6 +84,7 @@ namespace MMORPG.Controllers{
             try{
                 var players = await repository.GetAll();
                 RemoveId(players);
+                var sortedPlayers = players.SortByXp();
                 var jsonPlayers = JsonConvert.SerializeObject(players);
                 return Ok(jsonPlayers);
             }
@@ -85,6 +92,7 @@ namespace MMORPG.Controllers{
                 return e.GetBaseException().GetHttpCodeStatus();
             }
         }
+
         static void RemoveId(IEnumerable<Player> players){
             foreach (var player in players){
                 player.Id = Guid.Empty;

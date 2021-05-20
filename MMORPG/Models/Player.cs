@@ -5,13 +5,16 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace MMORPG.Models{
     [Serializable]
-    public class Player : IRequestObject{
+    public class Player : IRequestObject, IComparable<Player>{
         [BsonId] public Guid Id { get; set; }//TODO: Set by server!
         public string Name { get; set; }
-        [BsonElement("Score")] public int Score{ get; set; }
-        public int Level{ get; set; }
-        public List<Item> Items{ get; set; } = new List<Item>();
+        public int Gold{ get; set; }
+        public int Xp{ get; set; }
+        public List<Item> Items{ get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreationTime { get; set; }//TODO: Set by server!
+        public int CompareTo(Player other){
+            return Xp.CompareTo(other.Xp);
+        }
     }
 }

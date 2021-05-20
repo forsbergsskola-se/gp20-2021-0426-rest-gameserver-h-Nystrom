@@ -52,7 +52,7 @@ namespace ClientApi.Controllers{
                 return;
             }
             try{
-                var newPlayer = new Player{Name = playerNameText.text};
+                var newPlayer = new NewPlayer{Name = playerNameText.text};
                 var webRequestResponse = await client.PostWebRequest("players/create/",newPlayer);
                 var player = JsonConvert.DeserializeObject<Player>(webRequestResponse);
                 PlayerPrefs.SetString("UserName", player.Name);

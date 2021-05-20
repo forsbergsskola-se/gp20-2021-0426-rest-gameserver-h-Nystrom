@@ -7,7 +7,7 @@ namespace MMORPG.ServerApi{
         Task<TObject> Get(Guid id);
         Task<TObject[]> GetAll();
         Task<TObject> Create(TObject targetObject);
-        Task<TObject> Modify<TObject2>(Guid id, TObject2 targetObject)where TObject2 : IRequestObject;
+        Task<TObject> Modify(Guid id, string fieldName, int value);
         Task<TObject> Delete(Guid id);
     }
 }

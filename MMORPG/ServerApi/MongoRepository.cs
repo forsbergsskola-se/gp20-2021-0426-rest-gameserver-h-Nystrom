@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MMORPG.Models;
 using MMORPG.ServerApi.ServerExceptions;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -66,17 +67,15 @@ namespace MMORPG.ServerApi{
                 throw;
             }
         }
-        public async Task<TObject> Modify<TObject2>(Guid id, TObject2 targetObject) where TObject2 : IRequestObject{
+        public async Task<TObject> Modify(Guid id, string fieldName, int value){
             try{
                 var mongoCollection = mongoDatabase.GetCollection<TObject>(collectionName);
-                var updateTargetObject = Builders<TObject>.Update.Inc("Score", targetObject.Score);
+                var updateTargetObject = Builders<TObject>.Update.Inc(fieldName, value);
                 var targetObjectTask = mongoCollection.FindOneAndUpdateAsync(playerTarget => playerTarget.Id == id, updateTargetObject);
-                
                 if (await Task.WhenAny(targetObjectTask, Task.Delay(Timeout)) != targetObjectTask)
                     throw new RequestTimeoutException("408: Request timeout!");
                 if(targetObjectTask.Result == null)
                     throw new NotFoundException($"404: {typeof(TObject).Name} was not found!");
-                targetObjectTask.Result.Score += targetObject.Score;
                 return targetObjectTask.Result;
             }
             catch (Exception e){
