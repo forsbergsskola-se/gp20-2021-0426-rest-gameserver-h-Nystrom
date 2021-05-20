@@ -4,14 +4,12 @@ using ClientApi;
 using ClientApi.Models;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Controllers{
     public class LoginController : MonoBehaviour{
         //TODO: Implement ui class
         const string BaseUrl = "http://localhost:5001/api/mmorpg/";
-        [SerializeField] UnityEvent<IPlayer> sendPlayer = new UnityEvent<IPlayer>();
         [SerializeField] Text playerNameText;
         [SerializeField] int minNameSize = 5;
         IPlayer myPlayer;
@@ -35,7 +33,6 @@ namespace Controllers{
                 var webRequestResponse = await client.GetWebRequest($"players/myplayer/{Guid.Parse(userId)}");
                 myPlayer = JsonConvert.DeserializeObject<Player>(webRequestResponse);
                 PlayerPrefs.SetString("UserName", myPlayer.Name);
-                sendPlayer?.Invoke(myPlayer);
                 gameObject.SetActive(false);
             }
             catch (Exception e){
@@ -61,7 +58,6 @@ namespace Controllers{
                 PlayerPrefs.SetString("UserName", myPlayer.Name);
                 PlayerPrefs.SetString("UserId", myPlayer.Id.ToString());
                 Debug.Log(myPlayer.Id + myPlayer.Name);
-                sendPlayer?.Invoke(myPlayer);
                 gameObject.SetActive(false);
             }
             catch (Exception e){

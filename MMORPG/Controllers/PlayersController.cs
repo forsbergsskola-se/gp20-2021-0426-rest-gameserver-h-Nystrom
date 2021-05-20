@@ -19,6 +19,9 @@ namespace MMORPG.Controllers{
         [HttpGet("myplayer/{id}")]
         public async Task<IActionResult> GetMyPlayer(Guid id){
             try{
+                if (id == Guid.Empty)
+                    BadRequest("Needs to contain a player with a name!");
+                
                 var playerTask = await repository.Get(id);
                 var jsonPlayer = JsonConvert.SerializeObject(playerTask);
                 return Ok(jsonPlayer);
@@ -30,6 +33,8 @@ namespace MMORPG.Controllers{
         [HttpPost("create")]
         public async Task<IActionResult> CreatePlayer([FromBody]NewPlayer player){
             try{
+                if (player == null || player.Name == string.Empty)
+                    BadRequest("Needs to contain a player with a name!");
                 var newPlayer = new Player{
                     Name = player.Name,
                     CreationTime = DateTime.Now.ToUniversalTime()
@@ -57,6 +62,8 @@ namespace MMORPG.Controllers{
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeletePlayer(Guid id){
             try{
+                if (id == Guid.Empty)
+                    BadRequest("Needs to contain a player with a name!");
                 var removedPlayer = await repository.Delete(id);
                 removedPlayer.IsDeleted = true;
                 var jsonPlayer = JsonConvert.SerializeObject(removedPlayer);
