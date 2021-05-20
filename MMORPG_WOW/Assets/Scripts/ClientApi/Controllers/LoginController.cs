@@ -10,6 +10,7 @@ namespace ClientApi.Controllers{
         const string BaseUrl = "http://localhost:5001/api/mmorpg/";
         [SerializeField] Text playerNameText;
         [SerializeField] int minNameSize = 5;
+        [SerializeField] PlayerController playerPrefab;
         IPlayer myPlayer;
         IClient client;
         bool IsNotEmpty => myPlayer != null;
@@ -30,13 +31,19 @@ namespace ClientApi.Controllers{
             try{
                 var webRequestResponse = await client.GetWebRequest($"players/myplayer/{Guid.Parse(userId)}");
                 myPlayer = JsonConvert.DeserializeObject<Player>(webRequestResponse);
-                PlayerPrefs.SetString("UserName", myPlayer.Name);
+                InitialisePlayer();
                 gameObject.SetActive(false);
             }
             catch (Exception e){
                 Debug.Log(e.GetBaseException().Message);//TODO: Error message
             }
         }
+
+        void InitialisePlayer(){
+            var instance = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+            instance.SetUp(myPlayer);
+        }
+
         public async void CreatePlayer(){
             if(IsNotEmpty) 
                 return;
@@ -55,7 +62,7 @@ namespace ClientApi.Controllers{
                 myPlayer = JsonConvert.DeserializeObject<Player>(webRequestResponse);
                 PlayerPrefs.SetString("UserName", myPlayer.Name);
                 PlayerPrefs.SetString("UserId", myPlayer.Id.ToString());
-                Debug.Log(myPlayer.Id + myPlayer.Name);
+                InitialisePlayer();
                 gameObject.SetActive(false);
             }
             catch (Exception e){

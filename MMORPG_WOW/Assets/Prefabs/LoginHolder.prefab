@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3526672259048300699
 RectTransform:
   m_ObjectHideFlags: 0
@@ -115,7 +115,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -40, y: -40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3526672259153290862
 CanvasRenderer:
@@ -360,9 +360,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44ba45fc1ae66fc47a6a455fa2065107, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sendPlayer:
-    m_PersistentCalls:
-      m_Calls: []
+  playerNameText: {fileID: 3526672259845997321}
+  minNameSize: 5
+  playerPrefab: {fileID: 8597670781557803089, guid: 7578b39bbbbc1b043afe32a92aa7c368, type: 3}
 --- !u!114 &3526672259587080765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375,10 +375,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 055fa7110344424896fea34155e5a113, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activateLoginScreen:
-    m_PersistentCalls:
-      m_Calls: []
-  nameField: {fileID: 3526672259845997321}
+  loginPlayerUi: {fileID: 3526672259705459295}
+  createPlayerUi: {fileID: 3526672259048300698}
+  nameField: {fileID: 3526672260612443725}
 --- !u!1 &3526672259705459295
 GameObject:
   m_ObjectHideFlags: 0
@@ -494,7 +493,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -40, y: -40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3526672259834111429
 CanvasRenderer:
@@ -704,8 +703,8 @@ RectTransform:
   m_Father: {fileID: 3526672259048300699}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.4, y: 0.65}
-  m_AnchorMax: {x: 0.9, y: 0.85}
+  m_AnchorMin: {x: 0.4, y: 0.6}
+  m_AnchorMax: {x: 0.9, y: 0.75}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -790,20 +789,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3526672260184756941}
   m_TextComponent: {fileID: 3526672259845997321}
   m_Placeholder: {fileID: 3526672260241504346}
-  m_ContentType: 5
+  m_ContentType: 4
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 6
+  m_KeyboardType: 1
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 3
   m_CharacterLimit: 12
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3526672259587080766}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
@@ -1082,7 +1093,7 @@ RectTransform:
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0.4, y: 1}
+  m_AnchorMax: {x: 0.4, y: 0.85}
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
