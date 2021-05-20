@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI{
+namespace ClientApi.UI{
     public class LoginUIController : MonoBehaviour{
         [SerializeField] GameObject loginPlayerUi;
         [SerializeField] GameObject createPlayerUi;

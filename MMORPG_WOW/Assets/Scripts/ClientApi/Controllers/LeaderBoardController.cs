@@ -1,11 +1,10 @@
 ﻿using System;
-using ClientApi;
 using ClientApi.Models;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Controllers{
+namespace ClientApi.Controllers{
     public class LeaderBoardController : MonoBehaviour{
         const string BaseUrl = "http://localhost:5001/api/mmorpg/";
         [SerializeField]UnityEvent<Player[]> sendLeaderboard = new UnityEvent<Player[]>(); 

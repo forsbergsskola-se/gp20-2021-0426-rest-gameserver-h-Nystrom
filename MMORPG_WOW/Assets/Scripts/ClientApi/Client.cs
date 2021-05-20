@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Net.Http;
-using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
-using ClientApi.Models;
 using ClientApi.Utility;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using UnityEngine;
 
 namespace ClientApi{

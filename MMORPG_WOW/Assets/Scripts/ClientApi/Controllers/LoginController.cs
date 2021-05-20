@@ -1,12 +1,10 @@
 using System;
-using System.Net.Mime;
-using ClientApi;
 using ClientApi.Models;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Controllers{
+namespace ClientApi.Controllers{
     public class LoginController : MonoBehaviour{
         //TODO: Implement ui class
         const string BaseUrl = "http://localhost:5001/api/mmorpg/";
