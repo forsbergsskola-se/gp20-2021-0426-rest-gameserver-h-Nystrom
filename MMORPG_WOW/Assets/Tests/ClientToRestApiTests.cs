@@ -28,7 +28,7 @@ namespace Tests{
         public IEnumerator GetPlayerInJson()
         {
             const string uri = "players/myplayer/";
-            var id = Guid.Parse("6615f6de-b819-4e72-b93a-bd543d8d5c0b");
+            var id = Guid.Parse("92dc2e76-da45-47e2-8084-48f24935f78c");
             Task<string> webRequestTask;
             try{
                 webRequestTask = client.GetWebRequest(uri+id);

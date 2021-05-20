@@ -16,7 +16,7 @@ namespace GameServerTests.MmoRpgTests{
         [Test]
         public void AddNewPlayerToDataBase(){//TODO:Step one
             var player = new Player{
-                Name = "UserName",
+                Name = "ServerTestPlayer",
                 Level = 1,
                 IsDeleted = false,
                 Score = 1,
@@ -35,7 +35,7 @@ namespace GameServerTests.MmoRpgTests{
         [Test]
         public void GetPlayerFromDataBase(){
             try{
-                var playerId = Guid.Parse("6615f6de-b819-4e72-b93a-bd543d8d5c0b");
+                var playerId = Guid.Parse("92dc2e76-da45-47e2-8084-48f24935f78c");
                 var getPlayerTask = mongoRepository.Get(playerId);
                 Console.WriteLine($"Result name: {getPlayerTask.Result.Name}");
                 Assert.AreEqual("UserName", getPlayerTask.Result.Name);
@@ -68,7 +68,7 @@ namespace GameServerTests.MmoRpgTests{
                 var modifiedPlayer = new ModifiedPlayer{
                     Score = 2
                 };
-                var playerId = Guid.Parse("6615f6de-b819-4e72-b93a-bd543d8d5c0b");
+                var playerId = Guid.Parse("92dc2e76-da45-47e2-8084-48f24935f78c");
                 var getPlayerTask = mongoRepository.Get(playerId);
                 getPlayerTask.Wait();
                 var getModifiedPlayersTask = mongoRepository.Modify(getPlayerTask.Result.Id, modifiedPlayer);

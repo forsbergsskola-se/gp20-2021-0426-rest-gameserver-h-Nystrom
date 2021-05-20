@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ClientApi.Controllers{
     public class PlayerController : MonoBehaviour{
         const string BaseUrl = "http://localhost:5001/api/mmorpg/";
-        Client client;
+        IClient client;
         [SerializeField] Player[] leaderboard;
 
         void Start(){
@@ -15,15 +15,14 @@ namespace ClientApi.Controllers{
         public async void GetLeaderBoard(){
             const string uri = "players/leaderboard/";
             try{
-                var jsonResponse = await client.GetWebRequest(uri);
-                Debug.Log(jsonResponse);
-                leaderboard = JsonConvert.DeserializeObject<Player[]>(jsonResponse);
+                var webRequestTask = await client.GetWebRequest(uri);
+                leaderboard = JsonConvert.DeserializeObject<Player[]>(webRequestTask);
                 Debug.Log($"Success: {leaderboard.Length}");
                 Debug.Log($"Name of player one: " + leaderboard[0].Name);
             }
             catch (Exception e){
-                Debug.Log(e);
-                throw;
+                Debug.Log(e.GetBaseException().Message);
+                //TODO: Error message
             }
         }
     }

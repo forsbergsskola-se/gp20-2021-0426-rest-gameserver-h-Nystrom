@@ -672,19 +672,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1289818171}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1694954605}
-        m_TargetAssemblyTypeName: ClientApi.Controllers.PlayerController, Assembly-CSharp
-        m_MethodName: CreatePlayer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1289818171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -818,6 +806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44ba45fc1ae66fc47a6a455fa2065107, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leaderboard: []
 --- !u!4 &1694954606
 Transform:
   m_ObjectHideFlags: 0
