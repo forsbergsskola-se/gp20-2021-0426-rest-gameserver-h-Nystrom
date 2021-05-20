@@ -8,7 +8,7 @@ namespace ClientApi{
         string Name { get;}
         public int Score{ get; set; }
         public int Level{ get; set; }
-        // public List<Item> Items{ get; set; } = new List<Item>();
+        public List<Item> Items{ get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreationTime { get; set; }
     }
