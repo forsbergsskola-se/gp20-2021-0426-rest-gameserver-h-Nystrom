@@ -5,11 +5,17 @@ using MMORPG.Models;
 
 namespace MMORPG.Utility{
     public static class PlayerSortExtension{
-        public static IEnumerable<Player> SortByXp(this IEnumerable<Player> players){
-            var sorted = players.OrderBy(player => player.Xp).ToArray();
-            if (sorted.Length >= 10) 
-                Array.Resize(ref sorted, 10);
-            return sorted;
+        public static Player[] SortByXp(this IEnumerable<Player> players){
+            return players.OrderBy(player => player.Xp).ToArray();
+        }
+
+        public static IEnumerable<Player> Resize(this Player[] players, int maxLenght){
+            if (players.Length <= maxLenght) 
+                return players;
+            
+            var resizedPlayers = new Player[maxLenght];
+            Array.Copy(players, players.Length - maxLenght, resizedPlayers, 0, maxLenght);
+            return resizedPlayers;
         }
     }
 }

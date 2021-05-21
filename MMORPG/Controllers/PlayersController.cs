@@ -13,7 +13,7 @@ namespace MMORPG.Controllers{
     [Route("api/mmorpg/[controller]")]
     public class PlayersController : ControllerBase{
         readonly IRepository<Player> repository;
-
+        
         public PlayersController(IRepository<Player> repository){
             this.repository = repository;
         }
@@ -81,11 +81,15 @@ namespace MMORPG.Controllers{
         }
         [HttpGet("leaderboard")]
         public async Task<IActionResult> GetLeaderboard(){
+            const int maxLenght = 10;
             try{
                 var players = await repository.GetAll();
                 RemoveId(players);
-                var sortedPlayers = players.SortByXp();
-                var jsonPlayers = JsonConvert.SerializeObject(players);
+                var sortedPlayers = players.SortByXp()
+                    .Resize(maxLenght)
+                    .Reverse();
+                
+                var jsonPlayers = JsonConvert.SerializeObject(sortedPlayers);
                 return Ok(jsonPlayers);
             }
             catch (Exception e){
