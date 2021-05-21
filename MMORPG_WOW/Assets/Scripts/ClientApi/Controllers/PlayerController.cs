@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ClientApi.Broker;
 using ClientApi.Broker.Messages;
 using ClientApi.Models;
@@ -25,6 +26,34 @@ namespace ClientApi.Controllers{
             player = playerData;
             EventBroker.Instance().SendMessage(new UpdateHudMessage(player.Gold, player.Xp));
             GetCurrentServerDateTime();
+            SendQuestRequest();
+        }
+
+        async void SendQuestRequest(){
+            var uri = $"Items/newquest/{player.Id}";
+            if (player.Items != null && !HasNoQuest(player.Items)) 
+                return;
+            
+            try{
+                var webRequestResponse = await client.GetWebRequest(uri);
+                player = JsonConvert.DeserializeObject<Player>(webRequestResponse);
+                Debug.Log(player.Items.Count);
+                foreach (var item in player.Items){
+                    Debug.Log(item.Name + item.ItemType);
+                }
+            }
+            catch (Exception e){
+                Debug.Log("SendQuestRequest: " + e.GetBaseException().Message);
+            }
+        }
+
+        static bool HasNoQuest(IEnumerable<Item> items){
+            foreach (var item in items){
+                if (item.Name == "Quest"){
+                    return false;
+                }
+            }
+            return true;
         }
 
         async void GetCurrentServerDateTime(){

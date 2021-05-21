@@ -83,6 +83,24 @@ namespace MMORPG.ServerApi{
                 throw;
             }
         }
+
+        public async Task<TObject> UpdateItems<TItem>(Guid id, TItem targetItem) where TItem : Item{
+            try{
+                var mongoCollection = mongoDatabase.GetCollection<TObject>(collectionName);
+                var updateTargetObject = Builders<TObject>.Update.Push("Items", targetItem);
+                var targetObjectTask = mongoCollection.FindOneAndUpdateAsync(playerTarget => playerTarget.Id == id, updateTargetObject);
+                if (await Task.WhenAny(targetObjectTask, Task.Delay(Timeout)) != targetObjectTask)
+                    throw new RequestTimeoutException("408: Request timeout!");
+                if(targetObjectTask.Result == null)
+                    throw new NotFoundException($"404: {typeof(TObject).Name} was not found!");
+                return targetObjectTask.Result;
+            }
+            catch (Exception e){
+                Console.WriteLine(e.Message);
+                throw;
+            }
+        }
+
         public async Task<TObject> Delete(Guid id){
             try{
                 var mongoCollection = mongoDatabase.GetCollection<TObject>(collectionName);

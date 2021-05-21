@@ -38,7 +38,8 @@ namespace MMORPG.Controllers{
                     BadRequest("Needs to contain a player with a name!");
                 var newPlayer = new Player{
                     Name = player.Name,
-                    CreationTime = DateTime.Now.ToUniversalTime()
+                    CreationTime = DateTime.Now.ToUniversalTime(),
+                    Items = new List<Item>()
                 };
                 var playerTask = await repository.Create(newPlayer);
                 var jsonPlayer = JsonConvert.SerializeObject(playerTask);
@@ -49,6 +50,7 @@ namespace MMORPG.Controllers{
                 return e.GetBaseException().GetHttpCodeStatus();
             }
         }
+        //TODO:Change to Update.push instead...
         [HttpPost("modify/{id}")]
         public async Task<IActionResult> ModifyPlayer(Guid id, [FromBody]ModifiedPlayer modifiedPlayer){
             try{
