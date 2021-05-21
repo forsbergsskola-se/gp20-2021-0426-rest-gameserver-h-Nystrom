@@ -17,7 +17,6 @@ namespace MMORPG.Controllers{
         public PlayersController(IRepository<Player> repository){
             this.repository = repository;
         }
-        
         [HttpGet("myplayer/{id}")]
         public async Task<IActionResult> GetMyPlayer(Guid id){
             try{

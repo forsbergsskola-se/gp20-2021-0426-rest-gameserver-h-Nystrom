@@ -11,6 +11,34 @@ using UnityEngine.TestTools;
 using Random = UnityEngine.Random;
 
 namespace Tests{
+
+    public class ClientQuestTests{
+        const string BaseUrl = "http://localhost:5001/api/mmorpg/";
+        readonly IClient client = Client.NewClient(BaseUrl);
+        
+        [UnityTest]
+        public IEnumerator GetCurrentServerDateTimeComparedWithClientDateTime()
+        {
+            const string uri = "serverdatetime/current/";
+            const int maxSecondsDifferanceAllowed = 5;
+            Task<string> webRequestTask;
+            try{
+                webRequestTask = client.GetWebRequest(uri);
+            }
+            catch (Exception e){
+                Debug.Log(e);
+                throw;
+            }
+            yield return new WaitUntil(() => webRequestTask.IsFaulted || webRequestTask.IsCompleted);
+            Debug.Log(webRequestTask.Result);
+            var serverDateTime = JsonConvert.DeserializeObject<DateTime>(webRequestTask.Result);
+            var differanceInSeconds = DateTime.Now.Second - serverDateTime.Second;
+            Assert.AreEqual(typeof(DateTime),serverDateTime.GetType());
+            Assert.AreEqual(true, Math.Abs(differanceInSeconds) < maxSecondsDifferanceAllowed);
+            Debug.Log($"Seconds differance: {differanceInSeconds}");
+        }
+    }
+    
     public class ClientToRestApiTests
     {
         //TODO: Refactor and remove duplication!
