@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using ClientApi.Models;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -35,12 +36,6 @@ namespace ClientApi.Controllers{
                 Debug.Log(e.GetBaseException().Message);//TODO: Error message
             }
         }
-
-        void InitialisePlayer(IPlayer player){
-            var instance = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-            instance.SetUp(player);
-        }
-
         public async void CreatePlayer(){
             if (playerNameText.text.Length <= minNameSize){
                 Debug.Log($"Error: Min Name size: {minNameSize}");
@@ -91,6 +86,10 @@ namespace ClientApi.Controllers{
 #else
          Application.Quit();
 #endif
+        }
+        void InitialisePlayer(IPlayer player){
+            var instance = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+            instance.SetUp(player);
         }
         void ResetUserData(){
             PlayerPrefs.DeleteKey("UserId");

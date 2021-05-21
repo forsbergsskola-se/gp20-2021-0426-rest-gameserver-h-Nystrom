@@ -8,6 +8,7 @@ using UnityEngine;
 namespace ClientApi.Controllers{
     public class PlayerController : MonoBehaviour{
         const string BaseUrl = "http://localhost:5001/api/mmorpg/";
+        DateTime startDateTime;
         IPlayer player;
         IClient client;
 
@@ -15,6 +16,7 @@ namespace ClientApi.Controllers{
             client = Client.NewClient(BaseUrl);
             EventBroker.Instance().SubscribeMessage<ModifiedPlayer>(ModifyPlayer);   
         }
+
         void OnDestroy(){
             EventBroker.Instance().UnsubscribeMessage<ModifiedPlayer>(ModifyPlayer);   
         }
@@ -22,6 +24,19 @@ namespace ClientApi.Controllers{
             name = playerData.Name;
             player = playerData;
             EventBroker.Instance().SendMessage(new UpdateHudMessage(player.Gold, player.Xp));
+            GetCurrentServerDateTime();
+        }
+
+        async void GetCurrentServerDateTime(){
+            const string uri = "serverdatetime/current/";
+            try{
+                var webRequestResult = await client.GetWebRequest(uri);
+                startDateTime = JsonConvert.DeserializeObject<DateTime>(webRequestResult);
+                Debug.Log($"Server DateTime: {startDateTime}");
+            }
+            catch (Exception e){
+                Debug.Log(e);//TODO: Throw error
+            }
         }
         async void ModifyPlayer(ModifiedPlayer modifiedPlayer){
             const string uri = "players/modify/";
