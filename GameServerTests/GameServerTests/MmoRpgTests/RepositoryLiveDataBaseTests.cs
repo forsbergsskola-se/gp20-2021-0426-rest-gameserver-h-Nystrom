@@ -17,7 +17,7 @@ namespace GameServerTests.MmoRpgTests{
             testPlayerId = Guid.Parse("6c20f3f5-4810-482f-aa7c-95401e40ab8b");
         }
         [Test]
-        public void AddNewPlayerToDataBase(){//TODO:Step one
+        public void AddNewPlayerToDataBase(){
             var player = new Player{
                 Name = TestPlayerName,
                 IsDeleted = false,
